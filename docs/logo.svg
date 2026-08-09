@@ -1,30 +1,30 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="OneOpen Loom">
   <defs>
-    <linearGradient id="loom-bg" x1="10%" y1="0%" x2="90%" y2="100%">
-      <stop offset="0%" stop-color="#475569"/>
-      <stop offset="45%" stop-color="#1e293b"/>
+    <linearGradient id="loom-bg" x1="8%" y1="0%" x2="92%" y2="100%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="55%" stop-color="#1e293b"/>
       <stop offset="100%" stop-color="#0f172a"/>
     </linearGradient>
-    <linearGradient id="loom-shine" x1="20%" y1="0%" x2="55%" y2="60%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.2"/>
+    <linearGradient id="loom-shine" x1="18%" y1="0%" x2="50%" y2="55%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.22"/>
       <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <rect width="128" height="128" rx="30" fill="url(#loom-bg)"/>
-  <rect width="128" height="128" rx="30" fill="url(#loom-shine)"/>
-  <!-- Interlaced loom threads (suite umbrella mark) -->
-  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <!-- Warp (vertical) -->
-    <path d="M40 30v68" stroke="#94a3b8" stroke-width="5"/>
-    <path d="M56 30v68" stroke="#cbd5e1" stroke-width="5"/>
-    <path d="M72 30v68" stroke="#94a3b8" stroke-width="5"/>
-    <path d="M88 30v68" stroke="#cbd5e1" stroke-width="5"/>
-    <!-- Weft (horizontal), weaving over/under -->
-    <path d="M30 46h68" stroke="#e2e8f0" stroke-width="5" opacity="0.95"/>
-    <path d="M30 62h68" stroke="#f8fafc" stroke-width="5"/>
-    <path d="M30 78h68" stroke="#e2e8f0" stroke-width="5" opacity="0.95"/>
-    <!-- Accent threads hinting at product colors without copying their marks -->
-    <path d="M30 54h28" stroke="#e86a17" stroke-width="3.5" opacity="0.85"/>
-    <path d="M70 70h28" stroke="#14b8a6" stroke-width="3.5" opacity="0.9"/>
+  <rect width="128" height="128" rx="32" fill="url(#loom-bg)"/>
+  <rect width="128" height="128" rx="32" fill="url(#loom-shine)"/>
+  <!-- Loom weave: warp + weft -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M38 28v72" stroke="#94a3b8" stroke-width="4.5"/>
+    <path d="M52 28v72" stroke="#e2e8f0" stroke-width="4.5"/>
+    <path d="M66 28v72" stroke="#94a3b8" stroke-width="4.5"/>
+    <path d="M80 28v72" stroke="#e2e8f0" stroke-width="4.5"/>
+    <path d="M94 28v72" stroke="#94a3b8" stroke-width="4.5"/>
+    <path d="M28 44h72" stroke="#f8fafc" stroke-width="4.5" opacity="0.92"/>
+    <path d="M28 58h72" stroke="#cbd5e1" stroke-width="4.5"/>
+    <path d="M28 72h72" stroke="#f8fafc" stroke-width="4.5" opacity="0.92"/>
+    <path d="M28 86h72" stroke="#cbd5e1" stroke-width="4.5"/>
+    <!-- Product accents woven through the suite mark -->
+    <path d="M28 51h34" stroke="#e86a17" stroke-width="3" opacity="0.9"/>
+    <path d="M66 79h34" stroke="#14b8a6" stroke-width="3" opacity="0.95"/>
   </g>
 </svg>

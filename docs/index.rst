@@ -1,10 +1,14 @@
 OneOpen Loom documentation
 ==========================
 
-**OneOpen Loom** is an open-source collaboration suite:
+**OneOpen Loom** is the open-source collaboration suite for planning work and
+capturing knowledge—under one roof, with shared workspace identity.
 
 * **Workboard** — work management and delivery (``backend/`` + ``frontend/``)
 * **Magicboard** — knowledge, spaces, and pages (``magicboard/``)
+
+Suite mark: ``docs/logo.svg``. Product marks: ``docs/workboard/logo.svg``,
+``docs/magicboard/logo.svg``.
 
 Suite quick start
 -----------------
