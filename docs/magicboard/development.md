@@ -13,7 +13,7 @@ magicboard/
 ├── frontend/         # React SPA (port 5174)
 │   └── src/components/magicboard/editor/   # TipTap
 ├── collab/           # Optional Hocuspocus server (port 1234)
-└── docs/             # Product brand + overview (see also Sphinx docs/magicboard/)
+└── docs/             # Product overview (see also Sphinx docs/magicboard/)
 ```
 
 ## Backend

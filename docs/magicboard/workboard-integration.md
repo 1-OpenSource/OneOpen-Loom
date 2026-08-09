@@ -1,6 +1,6 @@
 # Workboard integration
 
-Magicboard and Workboard can share Loom workspace identity (login, members, branding) and an **optional HTTP connector**.
+Magicboard and Workboard can share Loom workspace identity (login, members) and an **optional HTTP connector**.
 
 Magicboard runs **without** Workboard. Integration is env-gated.
 

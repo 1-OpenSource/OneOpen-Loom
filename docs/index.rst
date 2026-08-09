@@ -1,29 +1,10 @@
 OneOpen Loom documentation
 ==========================
 
-**OneOpen Loom** is the open-source **collaboration suite** in
-`OneOpenSource <https://oneopensource.org>`_.
+**OneOpen Loom** is an open-source collaboration suite:
 
-Loom is the **umbrella**, not a single application. It hosts products that
-share workspace identity and optional integrations:
-
-* **OneOpen Workboard** — work management and delivery
-* **OneOpen Magicboard** — knowledge, spaces, and pages
-
-.. important::
-
-   **Loom ≠ Workboard ≠ Magicboard.**
-
-   * **Loom** — the suite (this documentation site).
-   * **Workboard** — track and deliver work (``backend/`` + ``frontend/``).
-   * **Magicboard** — team knowledge (``magicboard/``), runs independently.
-
-.. note::
-
-   Built with Sphinx and the
-   `Read the Docs <https://docs.readthedocs.io/>`_ theme.
-   Suite mark: ``docs/logo.svg``. Product marks live under
-   ``docs/workboard/logo.svg`` and ``docs/magicboard/logo.svg``.
+* **Workboard** — work management and delivery (``backend/`` + ``frontend/``)
+* **Magicboard** — knowledge, spaces, and pages (``magicboard/``)
 
 Suite quick start
 -----------------
@@ -86,7 +67,6 @@ Contents
    magicboard/collaboration
    magicboard/workboard-integration
    magicboard/development
-   magicboard/branding
 
 Indices
 -------

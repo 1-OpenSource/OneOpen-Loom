@@ -1,115 +1,30 @@
-<p align="center">
-  <img src="docs/logo.svg" alt="OneOpen Loom" width="96" height="96">
-</p>
+# OneOpen Loom
 
-<h1 align="center">OneOpen Loom</h1>
+Open-source collaboration suite: **Workboard** (work management) and **Magicboard** (knowledge and documentation).
 
-<p align="center">
-  <strong>Open-source collaboration suite</strong><br>
-  Workboard for delivery · Magicboard for knowledge — under one OneOpenSource roof.
-</p>
+| Product | Role | SPA | API |
+|---------|------|-----|-----|
+| Workboard | Workspaces, projects, work items, boards, sprints, workflows | http://localhost:5173 | http://localhost:8001 |
+| Magicboard | Spaces, pages, authoring, search, templates | http://localhost:5174 | http://localhost:8002 |
 
-<p align="center">
-  <a href="https://github.com/1-OpenSource/OneOpen-Loom"><img alt="Status" src="https://img.shields.io/badge/status-active-14b8a6?style=flat-square"></a>
-  <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache%202.0-blue?style=flat-square"></a>
-  <a href="https://oneopensource.org"><img alt="OneOpenSource" src="https://img.shields.io/badge/part%20of-OneOpenSource-14b8a6?style=flat-square"></a>
-</p>
-
-<p align="center">
-  <a href="#what-is-oneopen-loom">What is Loom</a> ·
-  <a href="#products">Products</a> ·
-  <a href="#quick-start">Quick start</a> ·
-  <a href="#documentation">Documentation</a> ·
-  <a href="#oneopen-ecosystem">Ecosystem</a>
-</p>
-
----
-
-## What is OneOpen Loom?
-
-**OneOpen Loom** is the open-source **collaboration suite** in [OneOpenSource](https://oneopensource.org).
-
-Loom is the **umbrella** — not a single app. Products share workspace identity, branding, and integrations. The suite mark (slate weave above) is distinct from each product logo.
-
-| | |
-|---|---|
-| **Loom** | The suite |
-| **Workboard** | Work management & delivery *(shipped)* |
-| **Magicboard** | Knowledge, spaces & pages *(shipped)* |
-
-> **Workboard ≠ Magicboard ≠ Loom.**  
-> Workboard tracks work. Magicboard holds docs. Loom is the suite that hosts both.
-
----
-
-## Products
-
-<p align="center">
-  <img src="docs/workboard/logo.svg" alt="OneOpen Workboard" width="64" height="64">
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="docs/magicboard/logo.svg" alt="OneOpen Magicboard" width="64" height="64">
-</p>
-
-<p align="center">
-  <strong>Workboard</strong> (orange) · <strong>Magicboard</strong> (teal)
-</p>
-
-### OneOpen Workboard
-
-Workspaces, projects, work items, backlog, Kanban workboard, sprints, OQL, workflows, service queues, dashboards, administration.
-
-| | |
-|---|---|
-| UI | React app (`frontend/`) — project routes, `/workspaces/...` |
-| API | FastAPI (`backend/`) — http://localhost:8001 |
-| Mark | [`docs/workboard/logo.svg`](docs/workboard/logo.svg) |
-
-### OneOpen Magicboard
-
-Team knowledge: spaces, hierarchical pages, TipTap WYSIWYG authoring, draft/publish, templates, versions, comments, watch/favorites, search, import/export, optional live collaboration.
-
-**Magicboard is an independent product** — it has its own API and SPA under [`magicboard/`](magicboard/) and can run without Workboard installed.
-
-| | |
-|---|---|
-| UI | `magicboard/frontend` → http://localhost:5174 |
-| API | `magicboard/backend` → http://localhost:8002 |
-| Docs | `magicboard/docs/` + Sphinx `docs/magicboard/` |
-| Mark | [`docs/magicboard/logo.svg`](docs/magicboard/logo.svg) |
-
-**Optional Workboard ↔ Magicboard connector** (env-gated):
-
-- Documentation panel on work items (when `VITE_MAGICBOARD_*` set)  
-- Work-item smart cards / suite search (when `WORKBOARD_API_URL` / `VITE_WORKBOARD_*` set)  
-- See [`workboard/connectors/magicboard/`](workboard/connectors/magicboard/) and [`platform/README.md`](platform/README.md)
-
----
-
-## Repository layout
+## Repository
 
 ```text
 OneOpen-Loom/
-├── README.md
-├── platform/             # Shared identity contract (JWT, workspaces)
-├── magicboard/           # Standalone Magicboard (API + SPA + docs)
-├── workboard/connectors/ # Optional Magicboard integration notes
-├── docs/                 # Suite Sphinx (Loom + Workboard + Magicboard)
-│   ├── logo.svg          # Loom suite mark
-│   ├── workboard/        # Workboard guide + product logo
-│   └── magicboard/       # Magicboard guide + product logo
-├── backend/              # Workboard API
-├── frontend/             # Workboard SPA
-├── docker-compose.yml
-└── LICENSE
+├── platform/               # Shared identity (JWT, workspaces)
+├── magicboard/             # Magicboard API + SPA
+├── workboard/connectors/   # Cross-product connector notes
+├── docs/                   # Sphinx documentation
+├── backend/                # Workboard API
+├── frontend/               # Workboard SPA
+└── docker-compose.yml
 ```
-
----
 
 ## Quick start
 
 **Prerequisites:** Python 3.12+, Node.js 20+
 
-### Workboard alone
+### Workboard
 
 ```bash
 cd backend
@@ -126,7 +41,7 @@ npm install
 npm run dev
 ```
 
-### Magicboard alone
+### Magicboard
 
 ```bash
 cd magicboard/backend
@@ -142,32 +57,15 @@ npm install
 npm run dev
 ```
 
-| App | URL |
-|-----|-----|
-| Workboard | http://localhost:5173 |
-| Magicboard | http://localhost:5174 |
-| Workboard API | http://localhost:8001 |
-| Magicboard API | http://localhost:8002 |
-
-### Demo login (after seed)
-
-| Email | Password |
-|-------|----------|
-| `akhil@oneopen.dev` | `password123` |
-
-### Docker
+After seed: `akhil@oneopen.dev` / `password123`
 
 ```bash
 docker compose up --build
 ```
 
-Details: [RUNBOOK.md](RUNBOOK.md).
-
----
+See [RUNBOOK.md](RUNBOOK.md) for operations. Connector env: [`platform/README.md`](platform/README.md).
 
 ## Documentation
-
-Sphinx documents the **entire Loom suite** (Workboard + Magicboard):
 
 ```bash
 cd docs
@@ -175,25 +73,7 @@ python -m pip install -r requirements-docs.txt
 python -m sphinx -b html . _build/html
 ```
 
-Open `docs/_build/html/index.html`.
-
-| Section | Path |
-|---------|------|
-| Suite landing | `docs/index.rst` |
-| Workboard guide | `docs/workboard/` |
-| Magicboard guide | `docs/magicboard/` |
-| Ops | [RUNBOOK.md](RUNBOOK.md) |
-
----
-
-## OneOpen ecosystem
-
-| Project | Role |
-|---------|------|
-| **[OneOpen Loom](https://github.com/1-OpenSource/OneOpen-Loom)** | Suite: Workboard + Magicboard |
-| **[OneOpen Flow](https://github.com/1-OpenSource/OneOpen-Flow)** | Visual workflow orchestration |
-
----
+Open `docs/_build/html/index.html`. Guides: `docs/workboard/`, `docs/magicboard/`.
 
 ## License
 
