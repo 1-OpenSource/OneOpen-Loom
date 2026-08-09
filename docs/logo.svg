@@ -1,30 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="OneOpen Loom">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="OneOpen Loom">
   <defs>
-    <linearGradient id="loom-bg" x1="8%" y1="0%" x2="92%" y2="100%">
-      <stop offset="0%" stop-color="#334155"/>
-      <stop offset="55%" stop-color="#1e293b"/>
-      <stop offset="100%" stop-color="#0f172a"/>
+    <linearGradient id="loom-bg" x1="8" y1="4" x2="56" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#34d399"/>
+      <stop offset="1" stop-color="#0f766e"/>
     </linearGradient>
-    <linearGradient id="loom-shine" x1="18%" y1="0%" x2="50%" y2="55%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.22"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    <linearGradient id="loom-glow" x1="18" y1="14" x2="50" y2="50" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff" stop-opacity=".32"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <rect width="128" height="128" rx="32" fill="url(#loom-bg)"/>
-  <rect width="128" height="128" rx="32" fill="url(#loom-shine)"/>
-  <!-- Loom weave: warp + weft -->
-  <g fill="none" stroke-linecap="round">
-    <path d="M38 28v72" stroke="#94a3b8" stroke-width="4.5"/>
-    <path d="M52 28v72" stroke="#e2e8f0" stroke-width="4.5"/>
-    <path d="M66 28v72" stroke="#94a3b8" stroke-width="4.5"/>
-    <path d="M80 28v72" stroke="#e2e8f0" stroke-width="4.5"/>
-    <path d="M94 28v72" stroke="#94a3b8" stroke-width="4.5"/>
-    <path d="M28 44h72" stroke="#f8fafc" stroke-width="4.5" opacity="0.92"/>
-    <path d="M28 58h72" stroke="#cbd5e1" stroke-width="4.5"/>
-    <path d="M28 72h72" stroke="#f8fafc" stroke-width="4.5" opacity="0.92"/>
-    <path d="M28 86h72" stroke="#cbd5e1" stroke-width="4.5"/>
-    <!-- Product accents woven through the suite mark -->
-    <path d="M28 51h34" stroke="#e86a17" stroke-width="3" opacity="0.9"/>
-    <path d="M66 79h34" stroke="#14b8a6" stroke-width="3" opacity="0.95"/>
-  </g>
+  <!-- App tile -->
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#loom-bg)"/>
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#loom-glow)"/>
+  <!-- Warp (vertical) -->
+  <path d="M22 16v32M32 14v36M42 16v32" fill="none" stroke="#042f2e" stroke-width="2.4" opacity=".22" stroke-linecap="round"/>
+  <!-- Weft (horizontal) interlaced feel -->
+  <path d="M16 24h32M14 32h36M16 40h32" fill="none" stroke="#ecfdf5" stroke-width="2.6" opacity=".9" stroke-linecap="round"/>
+  <!-- Soft under-weft for depth -->
+  <path d="M17 28h30M17 36h30" fill="none" stroke="#042f2e" stroke-width="1.6" opacity=".18" stroke-linecap="round"/>
+  <!-- Open ring (OneOpen) -->
+  <circle cx="32" cy="32" r="8" fill="none" stroke="#f0fdfa" stroke-width="3.4"/>
+  <circle cx="32" cy="32" r="3.3" fill="#042f2e" opacity=".5"/>
 </svg>
