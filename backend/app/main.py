@@ -19,7 +19,7 @@ from app.api import (
     reports,
     search,
     service_desk,
-    spaces,
+    magicboard,
     sprints,
     versions,
     work_items,
@@ -70,7 +70,7 @@ app.include_router(plans.router, prefix=settings.api_prefix)
 app.include_router(versions.router, prefix=settings.api_prefix)
 app.include_router(dashboards.router, prefix=settings.api_prefix)
 app.include_router(service_desk.router, prefix=settings.api_prefix)
-app.include_router(spaces.router, prefix=settings.api_prefix)
+app.include_router(magicboard.router, prefix=settings.api_prefix)
 app.include_router(enterprise.router, prefix=settings.api_prefix)
 app.include_router(integrations.router, prefix=settings.api_prefix)
 app.include_router(admin.router, prefix=settings.api_prefix)

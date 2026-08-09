@@ -496,6 +496,37 @@ class WorkItemService:
                     comment_text=body,
                 )
             )
+        elif rule_type in {"create_magicboard_page", "link_magicboard_page"}:
+            from app.models.project import Project
+            from app.schemas.space import SpacePageCreate
+            from app.services.space_service import SpaceService
+
+            space_id = config.get("space_id")
+            if not space_id:
+                return
+            template_key = str(config.get("template_key") or "blank")
+            title = str(config.get("title") or work_item.title)
+            space_service = SpaceService(self.db)
+            try:
+                from app.schemas.space import SpacePageFromTemplateCreate
+
+                page = space_service.create_page_from_template(
+                    uuid.UUID(str(space_id)),
+                    SpacePageFromTemplateCreate(
+                        template_key=template_key,
+                        title=title,
+                    ),
+                    user,
+                )
+            except Exception:
+                page = space_service.create_page(
+                    uuid.UUID(str(space_id)),
+                    SpacePageCreate(title=title, content=f"# {title}\n\nLinked from {work_item.work_item_key}."),
+                    user,
+                )
+            space_service.link_page_to_work_item(work_item.id, page.id, user)
+            project = self.db.get(Project, work_item.project_id)
+            _ = project
 
     def _validate_blocked_state(self, stage: WorkItemStatus, is_blocked: bool) -> None:
         if is_blocked and stage == WorkItemStatus.DONE:

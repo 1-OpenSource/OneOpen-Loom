@@ -28,6 +28,7 @@ import { workspaceService } from "../../services/workspaceService";
 import { projectService } from "../../services/projectService";
 import { useApi } from "../../hooks/useApi";
 import { applyWorkspaceBranding } from "../../utils/workspaceBranding";
+import { magicboardAppUrl } from "../../services/magicboardConnector";
 import { getActiveWorkspaceId, setActiveWorkspaceId } from "../../utils/workspaceState";
 
 function SidebarLink({
@@ -148,6 +149,7 @@ export default function Sidebar() {
   const brandTitle = brandedWorkspace?.brand_name?.trim() || brandedWorkspace?.name || "OneOpen";
   const customTagline = brandedWorkspace?.brand_tagline?.trim() || "";
   const brandSubtitle = customTagline || "Workboard";
+  const magicboardHref = magicboardAppUrl?.replace(/\/$/, "") || "";
 
   const manageTab = new URLSearchParams(location.search).get("tab");
   const workspacePath = selectedWorkspaceId ? `/workspaces/${selectedWorkspaceId}` : "";
@@ -210,23 +212,44 @@ export default function Sidebar() {
 
       <div className="sidebar-panel">
         {!collapsed ? (
-          <label className="sidebar-workspace-switcher">
-            <span>Workspace</span>
-            <select
-              value={selectedWorkspaceId}
-              onChange={(event) => {
-                setActiveWorkspaceId(event.target.value);
-                navigate(`/workspaces/${event.target.value}`);
-                closeMobile();
-              }}
-            >
-              {(workspaces ?? []).map((workspace) => (
-                <option key={workspace.id} value={workspace.id}>
-                  {workspace.name}
-                </option>
-              ))}
-            </select>
-          </label>
+          <>
+            <label className="sidebar-workspace-switcher">
+              <span>Workspace</span>
+              <select
+                value={selectedWorkspaceId}
+                onChange={(event) => {
+                  setActiveWorkspaceId(event.target.value);
+                  navigate(`/workspaces/${event.target.value}`);
+                  closeMobile();
+                }}
+              >
+                {(workspaces ?? []).map((workspace) => (
+                  <option key={workspace.id} value={workspace.id}>
+                    {workspace.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div className="sidebar-product-switcher" role="group" aria-label="Product">
+              <NavLink
+                to={selectedWorkspaceId ? `/workspaces/${selectedWorkspaceId}` : "/workspaces"}
+                className={({ isActive }) => `sidebar-product-link${isActive ? " active" : ""}`}
+                end
+                onClick={closeMobile}
+              >
+                Workboard
+              </NavLink>
+              {magicboardHref ? (
+                <a className="sidebar-product-link" href={magicboardHref} onClick={closeMobile}>
+                  Magicboard
+                </a>
+              ) : (
+                <NavLink to="/magicboard" className="sidebar-product-link" onClick={closeMobile}>
+                  Magicboard
+                </NavLink>
+              )}
+            </div>
+          </>
         ) : null}
 
         <nav className="sidebar-nav" aria-label="Primary">
@@ -256,13 +279,25 @@ export default function Sidebar() {
               onNavigate={closeMobile}
             />
           ) : null}
-          <SidebarLink
-            to="/spaces"
-            icon={<BookOpen size={18} />}
-            label="Spaces"
-            collapsed={collapsed}
-            onNavigate={closeMobile}
-          />
+          {magicboardHref ? (
+            <a
+              className={`sidebar-link${collapsed ? " collapsed-link" : ""}`}
+              href={magicboardHref}
+              title="Magicboard"
+              onClick={closeMobile}
+            >
+              <BookOpen size={18} />
+              {!collapsed ? <span>Magicboard</span> : null}
+            </a>
+          ) : (
+            <SidebarLink
+              to="/magicboard"
+              icon={<BookOpen size={18} />}
+              label="Magicboard"
+              collapsed={collapsed}
+              onNavigate={closeMobile}
+            />
+          )}
           <SidebarLink
             to={projectId ? `/projects/${projectId}/navigator` : "/navigator"}
             icon={<Search size={18} />}

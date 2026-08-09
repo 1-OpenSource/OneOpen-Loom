@@ -6,6 +6,7 @@ import BoardSettingsPage from "../pages/BoardSettingsPage";
 import CalendarPage from "../pages/CalendarPage";
 import DashboardPage from "../pages/DashboardPage";
 import LoginPage from "../pages/LoginPage";
+import MagicboardExternalRedirect from "../pages/MagicboardExternalRedirect";
 import NavigatorPage from "../pages/NavigatorPage";
 import PortalPage from "../pages/PortalPage";
 import ProjectDetailPage from "../pages/ProjectDetailPage";
@@ -97,6 +98,7 @@ export function AppRoutes() {
         <Route path="/projects/:projectId/queues" element={<QueuesPage />} />
         <Route path="/work-items/:workItemId" element={<WorkItemDetailPage />} />
         <Route path="/navigator" element={<NavigatorPage />} />
+        <Route path="/magicboard/*" element={<MagicboardExternalRedirect />} />
         <Route path="/spaces" element={<SpacesPage />} />
         <Route path="/spaces/:spaceId/pages/:pageId" element={<SpacePageEditor />} />
       </Route>

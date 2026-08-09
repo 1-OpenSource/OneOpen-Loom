@@ -58,7 +58,22 @@ from app.models.service_desk import (
     SlaClock,
     SlaGoal,
 )
-from app.models.space import Space, SpacePage, SpacePageVersion, WorkItemPage
+from app.models.space import (
+    Space,
+    SpaceMember,
+    SpaceMemberRole,
+    SpacePage,
+    SpacePageAttachment,
+    SpacePageComment,
+    SpacePageFavorite,
+    SpacePageRecent,
+    SpacePageShareLink,
+    SpacePageStatus,
+    SpacePageVersion,
+    SpacePageWatch,
+    SpaceWatch,
+    WorkItemPage,
+)
 from app.models.sprint import Sprint, SprintItem, SprintMetric, SprintState
 from app.models.user import User
 from app.models.version import ProjectVersion, WorkItemAffectedVersion, WorkItemFixVersion, WorkLog
@@ -137,8 +152,18 @@ __all__ = [
     "SlaClock",
     "SlaGoal",
     "Space",
+    "SpaceMember",
+    "SpaceMemberRole",
     "SpacePage",
+    "SpacePageAttachment",
+    "SpacePageComment",
+    "SpacePageFavorite",
+    "SpacePageRecent",
+    "SpacePageShareLink",
+    "SpacePageStatus",
     "SpacePageVersion",
+    "SpacePageWatch",
+    "SpaceWatch",
     "Sprint",
     "SprintItem",
     "SprintMetric",

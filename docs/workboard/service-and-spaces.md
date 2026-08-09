@@ -1,4 +1,4 @@
-# Service desk and Spaces
+# Service desk and Magicboard
 
 ## Service desk (Workboard)
 
@@ -12,8 +12,12 @@ Service-oriented projects can expose:
 
 Share the portal link with customers who should not need a full Workboard seat.
 
-## Spaces (Loom roadmap)
+## Magicboard (Loom knowledge product)
 
-**Spaces** (team docs / wiki) are planned as a **Loom** product surface — not a substitute for Workboard’s delivery model.
+**Magicboard** is Loom’s documentation product (spaces & pages). It is a sibling of Workboard, not a board view.
 
-Workboard may link to documentation pages over time; treat Spaces as a sibling product under the Loom suite, not as “the workboard.”
+- Open `/magicboard` from the product switcher  
+- Link pages from a work item’s **Documentation** panel  
+- Embed work items in pages with `{{workitem:KEY}}`  
+
+See {doc}`../magicboard/overview` and {doc}`../magicboard/workboard-integration`.

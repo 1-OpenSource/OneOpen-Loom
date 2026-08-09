@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Open-source collaboration suite</strong><br>
-  A family of products for work, knowledge, and delivery — under one OneOpenSource roof.
+  Workboard for delivery · Magicboard for knowledge — under one OneOpenSource roof.
 </p>
 
 <p align="center">
@@ -18,9 +18,8 @@
 <p align="center">
   <a href="#what-is-oneopen-loom">What is Loom</a> ·
   <a href="#products">Products</a> ·
-  <a href="#repository-layout">Layout</a> ·
+  <a href="#quick-start">Quick start</a> ·
   <a href="#documentation">Documentation</a> ·
-  <a href="#quick-start-workboard">Quick start</a> ·
   <a href="#oneopen-ecosystem">Ecosystem</a>
 </p>
 
@@ -30,109 +29,111 @@
 
 **OneOpen Loom** is the open-source **collaboration suite** in [OneOpenSource](https://oneopensource.org).
 
-Think of Loom as the **platform brand and home** for several focused products — not as a single app. Teams pick the product they need; over time those products share identity, admin patterns, and integrations under Loom.
+Loom is the **umbrella** — not a single app. Products share workspace identity, branding, and integrations.
 
 | | |
 |---|---|
-| **Loom** | The suite (umbrella) |
-| **Workboard** | Work management & delivery tracking *(shipped in this repo)* |
-| **Spaces** *(roadmap)* | Knowledge / wiki surfaces |
-| **More** | Additional Loom products as they land |
+| **Loom** | The suite |
+| **Workboard** | Work management & delivery *(shipped)* |
+| **Magicboard** | Knowledge, spaces & pages *(shipped)* |
 
-> **Workboard is not Loom.** Workboard is one product *inside* Loom — the piece for issues, boards, sprints, workflows, and project delivery.
+> **Workboard ≠ Magicboard ≠ Loom.**  
+> Workboard tracks work. Magicboard holds docs. Loom is the suite that hosts both.
 
 ---
 
 ## Products
 
-### OneOpen Workboard *(available now)*
+### OneOpen Workboard
 
-**Workboard** is Loom’s work-management product: workspaces, projects, work items, backlog, Kanban workboard, sprints, OQL navigator, workflows, service queues, dashboards, and workspace administration.
+Workspaces, projects, work items, backlog, Kanban workboard, sprints, OQL, workflows, service queues, dashboards, administration.
 
 | | |
 |---|---|
-| Code | `backend/`, `frontend/` in this repository |
-| Docs | Sphinx docs under [`docs/`](docs/) — see [Documentation](#documentation) |
-| Run | [RUNBOOK.md](RUNBOOK.md) |
+| UI | React app (`frontend/`) — project routes, `/workspaces/...` |
+| API | FastAPI (`backend/`) |
 
-### Coming under Loom
+### OneOpen Magicboard
 
-| Product | Intent |
-|---------|--------|
-| **Spaces** | Team documentation and knowledge next to delivery work |
-| **Shared platform** | Cross-product identity, branding, and admin patterns |
+Team knowledge: spaces, hierarchical pages, templates, versions, comments, watch/favorites, search, Markdown macros, import/export.
+
+**Magicboard is an independent product** — it has its own API and SPA under [`magicboard/`](magicboard/) and can run without Workboard installed.
+
+| | |
+|---|---|
+| UI | `magicboard/frontend` → http://localhost:5174 |
+| API | `magicboard/backend` → http://localhost:8002 |
+| Docs | `magicboard/docs/` (+ Sphinx `docs/magicboard/`) |
+
+**Optional Workboard ↔ Magicboard connector** (env-gated):
+
+- Documentation panel on work items (when `VITE_MAGICBOARD_*` set)  
+- `{{workitem:KEY}}` embeds (when `WORKBOARD_API_URL` / `VITE_WORKBOARD_*` set)  
+- Suite search across pages + work items  
+- See [`workboard/connectors/magicboard/`](workboard/connectors/magicboard/) and [`platform/README.md`](platform/README.md)
 
 ---
 
 ## Repository layout
 
 ```text
-OneOpen-Loom/                 ← suite repository
-├── README.md                 ← you are here (Loom suite overview)
-├── RUNBOOK.md                ← how to run Workboard locally / Docker
-├── docs/                     ← Sphinx documentation (Workboard-focused)
-│   ├── conf.py
-│   ├── index.rst
-│   └── workboard/…
-├── backend/                  ← Workboard API (FastAPI)
-├── frontend/                 ← Workboard UI (React)
+OneOpen-Loom/
+├── README.md
+├── platform/             # Shared identity contract (JWT, workspaces)
+├── magicboard/           # Standalone Magicboard (API + SPA + docs)
+├── workboard/connectors/ # Optional Magicboard integration notes
+├── docs/                 # Suite Sphinx
+├── backend/              # Workboard API
+├── frontend/             # Workboard SPA
 ├── docker-compose.yml
 └── LICENSE
 ```
 
 ---
 
-## Documentation
-
-Workboard has **Sphinx** docs (Read the Docs theme), same style as other OneOpen projects.
-
-```bash
-cd docs
-python -m pip install -r requirements-docs.txt
-sphinx-build -b html . _build/html
-```
-
-Then open `docs/_build/html/index.html` in your browser.
-
-| Doc | Contents |
-|-----|----------|
-| Sphinx site | Product guide, concepts, admin, development |
-| [RUNBOOK.md](RUNBOOK.md) | Install, database, seed, tests |
-| [docs/workboard/roadmap.md](docs/workboard/roadmap.md) | Capability phases |
-
----
-
-## Quick start (Workboard)
-
-Workboard is the runnable product in this repo today.
+## Quick start
 
 **Prerequisites:** Python 3.12+, Node.js 20+
 
-```bash
-git clone https://github.com/1-OpenSource/OneOpen-Loom.git
-cd OneOpen-Loom
+### Workboard alone
 
-# API
+```bash
 cd backend
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1          # Windows
-# source .venv/bin/activate           # macOS / Linux
 python -m pip install -r requirements.txt
-copy .env.example .env                # Windows
-# cp .env.example .env
+copy .env.example .env
 python -m alembic upgrade head
-python -m app.scripts.seed            # optional
-uvicorn app.main:app --reload --port 8000
+python -m app.scripts.seed
+uvicorn app.main:app --reload --port 8001
 ```
 
 ```bash
-# UI
 cd frontend
 npm install
 npm run dev
 ```
 
-Open **http://localhost:5173**. API: **http://localhost:8000**.
+### Magicboard alone
+
+```bash
+cd magicboard/backend
+python -m pip install -r requirements.txt
+copy .env.example .env
+python -m app.scripts.seed
+uvicorn app.main:app --reload --port 8002
+```
+
+```bash
+cd magicboard/frontend
+npm install
+npm run dev
+```
+
+| App | URL |
+|-----|-----|
+| Workboard | http://localhost:5173 |
+| Magicboard | http://localhost:5174 |
+| Workboard API | http://localhost:8001 |
+| Magicboard API | http://localhost:8002 |
 
 ### Demo login (after seed)
 
@@ -140,13 +141,31 @@ Open **http://localhost:5173**. API: **http://localhost:8000**.
 |-------|----------|
 | `akhil@oneopen.dev` | `password123` |
 
-### Docker (API + Postgres)
+### Docker
 
 ```bash
 docker compose up --build
 ```
 
-Run the frontend locally against that API. Details: [RUNBOOK.md](RUNBOOK.md).
+Details: [RUNBOOK.md](RUNBOOK.md).
+
+---
+
+## Documentation
+
+```bash
+cd docs
+python -m pip install -r requirements-docs.txt
+python -m sphinx -b html . _build/html
+```
+
+Open `docs/_build/html/index.html`.
+
+| Section | Path |
+|---------|------|
+| Workboard guide | `docs/workboard/` |
+| Magicboard guide | `docs/magicboard/` |
+| Ops | [RUNBOOK.md](RUNBOOK.md) |
 
 ---
 
@@ -154,25 +173,11 @@ Run the frontend locally against that API. Details: [RUNBOOK.md](RUNBOOK.md).
 
 | Project | Role |
 |---------|------|
-| **[OneOpen Loom](https://github.com/1-OpenSource/OneOpen-Loom)** | Collaboration suite (Workboard + future products) |
-| **[OneOpen Flow](https://github.com/1-OpenSource/OneOpen-Flow)** | Visual workflow orchestration & validation |
-
----
-
-## Contributing
-
-- Suite-level changes (docs structure, branding, shared platform): discuss in Loom issues/PRs  
-- Workboard features and bugs: same repo — keep PRs focused; follow patterns in `backend/app` and `frontend/src`  
-- Build Sphinx docs before doc PRs: `sphinx-build -b html docs docs/_build/html`
+| **[OneOpen Loom](https://github.com/1-OpenSource/OneOpen-Loom)** | Suite: Workboard + Magicboard |
+| **[OneOpen Flow](https://github.com/1-OpenSource/OneOpen-Flow)** | Visual workflow orchestration |
 
 ---
 
 ## License
 
 Apache License 2.0 — see [LICENSE](LICENSE).
-
----
-
-<p align="center">
-  <sub>OneOpen Loom · Suite home for Workboard and future products · <a href="https://oneopensource.org">OneOpenSource</a></sub>
-</p>

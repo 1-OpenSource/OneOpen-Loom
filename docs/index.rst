@@ -75,6 +75,14 @@ Contents
    workboard/roadmap
    workboard/gap-analysis
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Magicboard
+
+   magicboard/overview
+   magicboard/authoring
+   magicboard/workboard-integration
+
 Indices
 -------
 

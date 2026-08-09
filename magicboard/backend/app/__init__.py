@@ -1,0 +1,1 @@
+"""OneOpen Magicboard API."""

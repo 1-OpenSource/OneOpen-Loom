@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     mail_from_name: str = Field(default="OneOpen Workboard", alias="MAIL_FROM_NAME")
     mail_use_tls: bool = Field(default=True, alias="MAIL_USE_TLS")
     public_base_url: str = Field(default="http://localhost:8000", alias="PUBLIC_BASE_URL")
+    magicboard_api_url: str | None = Field(default=None, alias="MAGICBOARD_API_URL")
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore", case_sensitive=False)
 
@@ -34,6 +35,10 @@ class Settings(BaseSettings):
         if not stripped:
             return []
         return [origin.strip() for origin in stripped.split(",") if origin.strip()]
+
+    @property
+    def magicboard_connected(self) -> bool:
+        return bool(self.magicboard_api_url and self.magicboard_api_url.strip())
 
 
 @lru_cache
