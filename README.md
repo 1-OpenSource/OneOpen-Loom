@@ -171,6 +171,6 @@ OneOpen-Loom/
 Apache License 2.0 — see [LICENSE](LICENSE).
 
 <p align="center">
-  <img src="docs/logo.svg" alt="OneOpen Loom" width="48" height="48"><br>
+  <img src="docs/oneopensource/logo.svg" alt="OneOpenSource" width="48" height="48"><br>
   <sub>Part of <a href="https://oneopensource.org">OneOpenSource</a></sub>
 </p>

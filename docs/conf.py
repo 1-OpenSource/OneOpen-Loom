@@ -52,7 +52,7 @@ html_theme_options = {
     "logo_only": False,
     "prev_next_buttons_location": "bottom",
     "style_external_links": True,
-    "style_nav_header_background": "#1e293b",
+    "style_nav_header_background": "#0f766e",
     "collapse_navigation": False,
     "sticky_navigation": True,
     "navigation_depth": 3,
