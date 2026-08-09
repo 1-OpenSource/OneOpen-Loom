@@ -12,7 +12,6 @@
   </defs>
   <rect width="128" height="128" rx="30" fill="url(#mb-bg)"/>
   <rect width="128" height="128" rx="30" fill="url(#mb-shine)"/>
-  <!-- Stacked folio / open knowledge pages -->
   <g fill="none" stroke="#ffffff" stroke-linejoin="round">
     <rect x="34" y="42" width="52" height="62" rx="6" fill="#ffffff" fill-opacity="0.16" stroke-width="3"/>
     <rect x="40" y="34" width="52" height="62" rx="6" fill="#ffffff" fill-opacity="0.28" stroke-width="3"/>

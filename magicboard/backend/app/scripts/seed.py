@@ -32,6 +32,7 @@ def main() -> None:
                 slug="demo",
                 description="Magicboard standalone demo",
                 created_by=user.id,
+                accent_color="#0f766e",
                 brand_name="OneOpen Magicboard",
                 brand_tagline="Team knowledge",
             )
@@ -46,6 +47,19 @@ def main() -> None:
                 )
             )
             db.commit()
+        else:
+            changed = False
+            if workspace.accent_color in (None, "", "#e86a17"):
+                workspace.accent_color = "#0f766e"
+                changed = True
+            if not workspace.brand_name:
+                workspace.brand_name = "OneOpen Magicboard"
+                changed = True
+            if not workspace.brand_tagline:
+                workspace.brand_tagline = "Team knowledge"
+                changed = True
+            if changed:
+                db.commit()
 
         service = SpaceService(db)
         spaces = service.list_spaces(workspace.id, user)

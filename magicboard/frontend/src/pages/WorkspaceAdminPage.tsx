@@ -235,7 +235,7 @@ export default function WorkspaceAdminPage() {
       setWorkspaceDescription(workspace.description ?? "");
       setWorkspaceVisibility(workspace.visibility);
       setLogoUrl(workspace.logo_url ?? "");
-      setAccentColor(workspace.accent_color || "#e86a17");
+      setAccentColor(workspace.accent_color || "#0f766e");
       setBrandName(workspace.brand_name ?? "");
       setBrandTagline(workspace.brand_tagline ?? "");
     }

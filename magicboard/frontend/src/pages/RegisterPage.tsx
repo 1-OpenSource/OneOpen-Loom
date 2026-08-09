@@ -62,12 +62,12 @@ export default function RegisterPage() {
     <main className="auth-page">
       <section className="auth-panel">
         <div className="auth-heading">
-          <img className="auth-logo" src="/icon.svg" alt="OneOpen Workboard" width={56} height={56} />
+          <img className="auth-logo" src="/icon.svg" alt="OneOpen Magicboard" width={56} height={56} />
           <h1>{needsOwner ? "Create Owner Account" : "Create Account"}</h1>
           <p>
             {needsOwner
-              ? "No users exist yet. Set up the first owner account to unlock OneOpen Workboard."
-              : "Start a OneOpen Workboard workspace in Loom."}
+              ? "No users exist yet. Set up the first owner account to unlock OneOpen Magicboard."
+              : "Start a OneOpen Magicboard workspace in Loom."}
           </p>
         </div>
         {needsOwner ? (

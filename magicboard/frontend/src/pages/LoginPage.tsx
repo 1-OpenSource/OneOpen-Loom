@@ -60,9 +60,9 @@ export default function LoginPage() {
     <main className="auth-page">
       <section className="auth-panel">
         <div className="auth-heading">
-          <img className="auth-logo" src="/icon.svg" alt="OneOpen Workboard" width={56} height={56} />
-          <h1>OneOpen Workboard</h1>
-          <p>Sign in to your community workspace.</p>
+          <img className="auth-logo" src="/icon.svg" alt="OneOpen Magicboard" width={56} height={56} />
+          <h1>OneOpen Magicboard</h1>
+          <p>Sign in to your knowledge workspace.</p>
         </div>
         <form className="form-stack" onSubmit={handleSubmit}>
           {error && <div className="error-banner">{error}</div>}

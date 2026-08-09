@@ -4,6 +4,8 @@ Standalone **team knowledge & documentation** product in the OneOpen Loom suite.
 
 Magicboard runs **without Workboard**. Optional Workboard integration is env-gated.
 
+**Brand:** Ink ledger (celadon folio mark) — see [docs/brand.md](docs/brand.md). Distinct from Workboard’s orange kanban identity.
+
 ## Quick start
 
 ### API (port 8002)

@@ -39,7 +39,7 @@ class Workspace(Base):
     slug: Mapped[str] = mapped_column(String(180), nullable=False, unique=True, index=True)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     logo_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
-    accent_color: Mapped[str] = mapped_column(String(20), nullable=False, default="#e86a17")
+    accent_color: Mapped[str] = mapped_column(String(20), nullable=False, default="#0f766e")
     brand_name: Mapped[str | None] = mapped_column(String(160), nullable=True)
     brand_tagline: Mapped[str | None] = mapped_column(String(255), nullable=True)
     visibility: Mapped[WorkspaceVisibility] = mapped_column(

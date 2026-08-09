@@ -85,11 +85,11 @@ export default function Sidebar() {
       <aside className={`sidebar${collapsed ? " collapsed" : ""}${mobileOpen ? " mobile-open" : ""}`}>
         <div className="sidebar-brand">
           <div className="sidebar-brand-lockup">
-            {brandedWorkspace?.logo_url ? (
-              <img src={brandedWorkspace.logo_url} alt="" className="sidebar-brand-logo" />
-            ) : (
-              <BookOpen size={22} />
-            )}
+            <img
+              src={brandedWorkspace?.logo_url || "/icon.svg"}
+              alt=""
+              className="sidebar-brand-logo"
+            />
             {!collapsed ? (
               <div>
                 <strong>{brandName}</strong>

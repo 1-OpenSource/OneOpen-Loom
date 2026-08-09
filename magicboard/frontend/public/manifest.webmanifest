@@ -1,12 +1,12 @@
 {
-  "name": "OneOpen Workboard",
-  "short_name": "Workboard",
-  "description": "OneOpen Workboard — work management in the OneOpen Loom suite.",
+  "name": "OneOpen Magicboard",
+  "short_name": "Magicboard",
+  "description": "OneOpen Magicboard — team knowledge and documentation in the OneOpen Loom suite.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#f3f5f9",
-  "theme_color": "#e86a17",
+  "background_color": "#eef5f3",
+  "theme_color": "#0f766e",
   "icons": [
     {
       "src": "/icon.svg",
