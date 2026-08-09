@@ -147,7 +147,7 @@ export default function Sidebar() {
   const hasProject = Boolean(projectId);
   const brandTitle = brandedWorkspace?.brand_name?.trim() || brandedWorkspace?.name || "OneOpen";
   const customTagline = brandedWorkspace?.brand_tagline?.trim() || "";
-  const brandSubtitle = customTagline || "Loom";
+  const brandSubtitle = customTagline || "Workboard";
 
   const manageTab = new URLSearchParams(location.search).get("tab");
   const workspacePath = selectedWorkspaceId ? `/workspaces/${selectedWorkspaceId}` : "";

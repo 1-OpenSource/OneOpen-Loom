@@ -1,0 +1,13 @@
+/* OneOpen Workboard Sphinx tweaks */
+.wy-nav-content {
+  max-width: 920px;
+}
+
+.wy-side-nav-search {
+  background-color: #0f766e;
+}
+
+.rst-content .note,
+.rst-content .tip {
+  border-radius: 6px;
+}

@@ -60,8 +60,8 @@ export default function LoginPage() {
     <main className="auth-page">
       <section className="auth-panel">
         <div className="auth-heading">
-          <img className="auth-logo" src="/icon.svg" alt="OneOpen Loom" width={56} height={56} />
-          <h1>OneOpen Loom</h1>
+          <img className="auth-logo" src="/icon.svg" alt="OneOpen Workboard" width={56} height={56} />
+          <h1>OneOpen Workboard</h1>
           <p>Sign in to your community workspace.</p>
         </div>
         <form className="form-stack" onSubmit={handleSubmit}>

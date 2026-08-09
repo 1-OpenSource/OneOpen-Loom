@@ -1,7 +1,7 @@
 {
-  "name": "OneOpen Loom",
-  "short_name": "Loom",
-  "description": "OneOpen Loom — open-source work management for planning, tracking, and shipping.",
+  "name": "OneOpen Workboard",
+  "short_name": "Workboard",
+  "description": "OneOpen Workboard — work management in the OneOpen Loom suite.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

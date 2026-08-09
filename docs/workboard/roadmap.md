@@ -1,8 +1,9 @@
 # Product Roadmap — OneOpen Workboard
 
-Living engineering index for Software + Service + Docs + Enterprise parity goals.
+Living engineering index for Workboard capability phases (Software + Service + Enterprise).
+Spaces and other suite surfaces belong to **Loom**, not only to Workboard.
 
-**Baseline:** Phase 1 Kanban coherence is complete. See [PRODUCT_GAP_ANALYSIS.md](./PRODUCT_GAP_ANALYSIS.md).
+**Baseline:** Phase 1 Kanban coherence is complete. See {doc}`gap-analysis`.
 
 | Phase | Name | Status |
 |---|---|---|
@@ -18,7 +19,7 @@ Living engineering index for Software + Service + Docs + Enterprise parity goals
 | 10 | Releases, versions, time tracking | Done |
 | 11 | Dashboards + templates + forms | Done |
 | 12 | Service Management essentials | Done |
-| 13 | Spaces (docs/wiki) | Done |
+| 13 | Spaces hooks (docs links; full Spaces is a Loom product) | Partial |
 | 14 | Permissions, SSO, compliance | Done |
 | 15 | Integrations, PWA, apps platform | Done |
 

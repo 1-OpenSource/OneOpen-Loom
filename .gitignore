@@ -17,3 +17,5 @@ frontend/dist/
 frontend/.vite/
 
 *.log
+
+docs/_build/

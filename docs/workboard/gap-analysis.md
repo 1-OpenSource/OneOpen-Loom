@@ -11,7 +11,7 @@ Phase 1 establishes a coherent Kanban product model:
 
 `BLOCKED` is an interruption **flag** (`is_blocked`), not a board column.
 
-For the full phased engineering plan (Software + Service + Docs + Enterprise), see **[PRODUCT_ROADMAP.md](./PRODUCT_ROADMAP.md)**.
+For the full phased engineering plan, see {doc}`roadmap`.
 
 ---
 
