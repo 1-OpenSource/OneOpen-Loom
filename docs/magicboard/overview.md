@@ -6,26 +6,36 @@ It is **independent of Workboard**: install and run only `magicboard/` if you do
 
 | | |
 |---|---|
-| **Loom** | Collaboration suite |
-| **Workboard** | Work management & delivery (`backend/` + `frontend/`) |
-| **Magicboard** | Spaces & pages (`magicboard/`) |
+| **Loom** | Collaboration suite (slate weave mark: `docs/logo.svg`) |
+| **Workboard** | Work management (`backend/` + `frontend/`, orange kanban mark) |
+| **Magicboard** | Spaces & pages (`magicboard/`, teal folio mark) |
 
-## Run alone
+## What Magicboard is for
 
-See [magicboard/README.md](../../magicboard/README.md) — API on port **8002**, SPA on **5174**.
+| Job | Surface |
+|-----|---------|
+| Organize knowledge | Spaces with keys and optional members |
+| Write docs | Hierarchical pages, TipTap WYSIWYG |
+| Control visibility | Draft vs published status |
+| Reuse structure | Templates (blank, meeting notes, decision, runbook) |
+| Collaborate | Comments, watch, favorites, optional live editing |
+| Attach evidence | Page attachments, images, file cards |
+| Find content | Full-text search; suite search when Workboard is connected |
 
-## Optional Workboard integration
+## Stack
 
-When both products are deployed with connector env vars (see `platform/README.md`):
+| Layer | Technology |
+|-------|------------|
+| API | FastAPI — http://localhost:8002 |
+| SPA | React / Vite — http://localhost:5174 |
+| Optional collab | Hocuspocus / Yjs — ws://localhost:1234 |
 
-- Work item Documentation panel links Magicboard pages  
-- `{{workitem:KEY}}` macros resolve live status  
-- Suite search merges pages + work items  
+## Product logo
 
-## Capabilities
+Sphinx and README use [`logo.svg`](logo.svg) (teal folio). Brand notes: [branding](branding.md) and `magicboard/docs/brand.md`.
 
-- Spaces with keys and member roles  
-- Hierarchical pages, slugs, draft/published  
-- Markdown macros (`toc`, `workitem`, `info`, `include`)  
-- Templates, versions, comments, watch, favorites  
-- Attachments, share links, import/export  
+## Next
+
+- [Quick start](quickstart.md)
+- [Concepts](concepts.md)
+- [Authoring](authoring.md)

@@ -5,7 +5,9 @@
 ## Logo
 
 - Mark: stacked folio / open knowledge pages on a teal rounded square
-- File: `docs/logo.svg` (same as SPA `frontend/public/icon.svg`)
+- Files: `magicboard/docs/logo.svg` and suite copy `docs/magicboard/logo.svg`
+- Suite umbrella mark is separate: `docs/logo.svg` (slate weave — not this folio)
+- Workboard mark is separate: `docs/workboard/logo.svg` (orange kanban)
 - Clear space: keep at least 1/8 of the mark width empty around the icon
 - Do not recolor to Workboard orange (`#e86a17`)
 - Do not replace the folio with kanban columns or work-item cards

@@ -1,25 +1,37 @@
-import { BookOpen, Clock, Plus, Search, Star } from "lucide-react";
+import { BookOpen, Clock, Plus, Star } from "lucide-react";
 import type { FormEvent } from "react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import Button from "../../components/ui/Button";
-import Card from "../../components/ui/Card";
 import EmptyState from "../../components/ui/EmptyState";
 import Input from "../../components/ui/Input";
 import Modal from "../../components/ui/Modal";
-import PageHeader from "../../components/ui/PageHeader";
 import Skeleton from "../../components/ui/Skeleton";
 import { useToast } from "../../components/ui/ToastProvider";
 import { useApi } from "../../hooks/useApi";
 import { magicboardService } from "../../services/magicboardService";
+import { workspaceService } from "../../services/workspaceService";
 import type { SuiteSearchResult } from "../../types/magicboard";
 import { getApiErrorMessage } from "../../utils/getApiErrorMessage";
 import { formatDateTime } from "../../utils/formatDate";
-import { getActiveWorkspaceId } from "../../utils/workspaceState";
+import { getActiveWorkspaceId, setActiveWorkspaceId } from "../../utils/workspaceState";
+
+const workboardAppUrl = (import.meta.env.VITE_WORKBOARD_APP_URL as string | undefined)?.trim();
 
 export default function MagicboardHomePage() {
   const { pushToast } = useToast();
-  const workspaceId = getActiveWorkspaceId() ?? "";
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [workspaceId, setWorkspaceId] = useState(() => getActiveWorkspaceId() ?? "");
+  const { data: workspaces } = useApi(() => workspaceService.listWorkspaces(), []);
+
+  useEffect(() => {
+    if (workspaceId) return;
+    const first = workspaces?.[0]?.id;
+    if (!first) return;
+    setActiveWorkspaceId(first);
+    setWorkspaceId(first);
+  }, [workspaceId, workspaces]);
+
   const { data: spaces, isLoading, error, reload } = useApi(
     () => (workspaceId ? magicboardService.listSpaces(workspaceId) : Promise.resolve([])),
     [workspaceId]
@@ -32,26 +44,25 @@ export default function MagicboardHomePage() {
     () => (workspaceId ? magicboardService.listRecent(workspaceId) : Promise.resolve([])),
     [workspaceId]
   );
-  const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SuiteSearchResult>({ pages: [], work_items: [] });
-  const [isSearching, setIsSearching] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [name, setName] = useState("");
   const [key, setKey] = useState("");
 
-  async function handleSearch(event: FormEvent) {
-    event.preventDefault();
-    if (!workspaceId || !searchQuery.trim()) return;
-    setIsSearching(true);
-    try {
-      const results = await magicboardService.suiteSearch(workspaceId, searchQuery.trim());
-      setSearchResults(results);
-    } catch (searchError) {
-      pushToast(getApiErrorMessage(searchError, "Search failed"), "error");
-    } finally {
-      setIsSearching(false);
+  useEffect(() => {
+    if (searchParams.get("createSpace") === "1") {
+      setIsCreateOpen(true);
+      const next = new URLSearchParams(searchParams);
+      next.delete("createSpace");
+      setSearchParams(next, { replace: true });
     }
-  }
+  }, [searchParams, setSearchParams]);
+
+  useEffect(() => {
+    const q = searchParams.get("q");
+    if (!q || !workspaceId) return;
+    void magicboardService.suiteSearch(workspaceId, q).then(setSearchResults).catch(() => undefined);
+  }, [searchParams, workspaceId]);
 
   async function handleCreateSpace(event: FormEvent) {
     event.preventDefault();
@@ -73,166 +84,149 @@ export default function MagicboardHomePage() {
   }
 
   return (
-    <>
-      <PageHeader
-        eyebrow="Magicboard"
-        title="Knowledge spaces"
-        description="Document decisions, specs, and team knowledge in structured spaces."
-        actions={
-          <Button icon={<Plus size={16} />} onClick={() => setIsCreateOpen(true)} disabled={!workspaceId}>
-            New Space
-          </Button>
-        }
-      />
+    <div className="mb-home">
+      <header className="mb-home-hero">
+        <div>
+          <p className="mb-kicker">Home</p>
+          <h1>Your knowledge base</h1>
+          <p className="mb-home-lead">Browse spaces, pick up recent pages, and keep starred docs close.</p>
+        </div>
+        <Button icon={<Plus size={16} />} onClick={() => setIsCreateOpen(true)} disabled={!workspaceId}>
+          Create space
+        </Button>
+      </header>
 
-      <Card className="magicboard-search-card">
-        <form className="inline-form magicboard-search-form" onSubmit={handleSearch}>
-          <Input
-            label="Suite search"
-            value={searchQuery}
-            onChange={(event) => setSearchQuery(event.target.value)}
-            placeholder="Search Magicboard pages and Workboard items…"
-          />
-          <Button type="submit" icon={<Search size={16} />} disabled={!searchQuery.trim() || isSearching}>
-            Search
-          </Button>
-        </form>
-        {searchResults.pages.length || searchResults.work_items.length ? (
-          <div className="content-grid two-column-grid">
-            <div className="list-stack">
-              <h3 className="section-subheading">Pages</h3>
-              {searchResults.pages.length ? (
-                searchResults.pages.map((hit) => (
-                  <Link
-                    key={hit.page_id}
-                    to={`/magicboard/spaces/${hit.space_id}/pages/${hit.page_id}`}
-                    className="list-row"
-                  >
-                    <div>
-                      <strong>{hit.title}</strong>
-                      <p className="muted-copy">
-                        {hit.space_key} · {hit.slug}
-                        {hit.snippet ? ` — ${hit.snippet}` : ""}
-                      </p>
-                    </div>
-                  </Link>
-                ))
-              ) : (
-                <p className="muted-copy">No pages matched.</p>
-              )}
-            </div>
-            <div className="list-stack">
-              <h3 className="section-subheading">Work items</h3>
-              {searchResults.work_items.length ? (
-                searchResults.work_items.map((item) => (
-                  <Link key={item.id} to={`/work-items/${item.id}`} className="list-row">
-                    <div>
-                      <strong>
-                        {item.work_item_key} · {item.title}
-                      </strong>
-                      <p className="muted-copy">{item.status}</p>
-                    </div>
-                  </Link>
-                ))
-              ) : (
-                <p className="muted-copy">No work items matched.</p>
-              )}
-            </div>
+      {searchResults.pages.length || searchResults.work_items.length ? (
+        <section className="mb-panel">
+          <div className="mb-panel-head">
+            <h2>Search results</h2>
           </div>
-        ) : null}
-      </Card>
+          <div className="mb-result-list">
+            {searchResults.pages.map((hit) => (
+              <Link
+                key={hit.page_id}
+                to={`/magicboard/spaces/${hit.space_id}/pages/${hit.page_id}`}
+                className="mb-result-row"
+              >
+                <strong>{hit.title}</strong>
+                <span>
+                  {hit.space_key} · {hit.slug}
+                  {hit.snippet ? ` — ${hit.snippet}` : ""}
+                </span>
+              </Link>
+            ))}
+            {searchResults.work_items.map((item) => {
+              const href = workboardAppUrl
+                ? `${workboardAppUrl.replace(/\/$/, "")}/work-items/${item.id}`
+                : undefined;
+              const body = (
+                <>
+                  <strong>
+                    {item.work_item_key} · {item.title}
+                  </strong>
+                  <span>{item.status}</span>
+                </>
+              );
+              return href ? (
+                <a key={item.id} href={href} className="mb-result-row">
+                  {body}
+                </a>
+              ) : (
+                <div key={item.id} className="mb-result-row">
+                  {body}
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      ) : null}
 
-      <div className="content-grid two-column-grid">
-        <Card>
-          <div className="section-heading">
+      <div className="mb-home-grid">
+        <section className="mb-panel">
+          <div className="mb-panel-head">
             <h2>
-              <Star size={16} /> Favorites
+              <Star size={16} /> Starred
             </h2>
-            <span className="section-count">{favorites?.length ?? 0}</span>
           </div>
-          <div className="list-stack">
-            {favorites?.length ? (
-              favorites.map((item) => (
+          {favorites?.length ? (
+            <div className="mb-result-list">
+              {favorites.map((item) => (
                 <Link
                   key={item.page_id}
                   to={`/magicboard/spaces/${item.space_id}/pages/${item.page_id}`}
-                  className="list-row"
+                  className="mb-result-row"
                 >
-                  <span>{item.title}</span>
+                  <strong>{item.title}</strong>
                 </Link>
-              ))
-            ) : (
-              <p className="muted-copy">Star pages to find them quickly.</p>
-            )}
-          </div>
-        </Card>
+              ))}
+            </div>
+          ) : (
+            <p className="mb-quiet">Star pages while reading to find them here.</p>
+          )}
+        </section>
 
-        <Card>
-          <div className="section-heading">
+        <section className="mb-panel">
+          <div className="mb-panel-head">
             <h2>
               <Clock size={16} /> Recent
             </h2>
-            <span className="section-count">{recent?.length ?? 0}</span>
           </div>
-          <div className="list-stack">
-            {recent?.length ? (
-              recent.map((item) => (
+          {recent?.length ? (
+            <div className="mb-result-list">
+              {recent.map((item) => (
                 <Link
                   key={`${item.page_id}-${item.viewed_at}`}
                   to={`/magicboard/spaces/${item.space_id}/pages/${item.page_id}`}
-                  className="list-row"
+                  className="mb-result-row"
                 >
-                  <div>
-                    <span>{item.title}</span>
-                    <p className="muted-copy">{formatDateTime(item.viewed_at)}</p>
-                  </div>
+                  <strong>{item.title}</strong>
+                  <span>{formatDateTime(item.viewed_at)}</span>
                 </Link>
-              ))
-            ) : (
-              <p className="muted-copy">Recently viewed pages appear here.</p>
-            )}
-          </div>
-        </Card>
-      </div>
-
-      {isLoading ? (
-        <Card>
-          <Skeleton className="skeleton-heading" />
-          <Skeleton className="skeleton-line" />
-        </Card>
-      ) : null}
-      {error ? <div className="error-banner">{error}</div> : null}
-
-      {!isLoading && !spaces?.length ? (
-        <EmptyState
-          title="No spaces yet"
-          description="Create a space to start documenting knowledge."
-          action={
-            <Button icon={<Plus size={16} />} onClick={() => setIsCreateOpen(true)} disabled={!workspaceId}>
-              New Space
-            </Button>
-          }
-        />
-      ) : null}
-
-      <div className="content-grid three-column-grid">
-        {(spaces ?? []).map((space) => (
-          <Card key={space.id}>
-            <div className="section-heading">
-              <h2>
-                <BookOpen size={16} /> {space.name}
-              </h2>
-              <span className="section-count">{space.key}</span>
+              ))}
             </div>
-            <p className="muted-copy">{space.description || "Open this space to browse pages."}</p>
-            <Link to={`/magicboard/spaces/${space.id}`}>
-              <Button variant="secondary">Open space</Button>
-            </Link>
-          </Card>
-        ))}
+          ) : (
+            <p className="mb-quiet">Pages you open will show up here.</p>
+          )}
+        </section>
       </div>
 
-      <Modal isOpen={isCreateOpen} title="New Space" onClose={() => setIsCreateOpen(false)}>
+      <section className="mb-spaces-section">
+        <div className="mb-panel-head">
+          <h2>Spaces</h2>
+        </div>
+        {isLoading ? (
+          <div className="mb-space-grid">
+            <Skeleton className="skeleton-heading" />
+            <Skeleton className="skeleton-line" />
+          </div>
+        ) : null}
+        {error ? <div className="error-banner">{error}</div> : null}
+        {!isLoading && !spaces?.length ? (
+          <EmptyState
+            title="No spaces yet"
+            description="Create a space for a team, project, or knowledge area."
+            action={
+              <Button icon={<Plus size={16} />} onClick={() => setIsCreateOpen(true)} disabled={!workspaceId}>
+                Create space
+              </Button>
+            }
+          />
+        ) : null}
+        <div className="mb-space-grid">
+          {(spaces ?? []).map((space) => (
+            <Link key={space.id} to={`/magicboard/spaces/${space.id}`} className="mb-space-tile">
+              <span className="mb-space-tile-icon">
+                <BookOpen size={22} />
+              </span>
+              <span className="mb-space-tile-key">{space.key}</span>
+              <strong>{space.name}</strong>
+              <span className="mb-quiet">{space.description || "Open space"}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <Modal isOpen={isCreateOpen} title="Create space" onClose={() => setIsCreateOpen(false)}>
         <form className="form-stack" onSubmit={handleCreateSpace}>
           <Input label="Name" value={name} onChange={(event) => setName(event.target.value)} required />
           <Input
@@ -250,6 +244,6 @@ export default function MagicboardHomePage() {
           </div>
         </form>
       </Modal>
-    </>
+    </div>
   );
 }

@@ -8,7 +8,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
-project = "OneOpen Workboard"
+project = "OneOpen Loom"
 author = "OneOpenSource"
 copyright = f"{date.today().year}, OneOpenSource"
 release = "0.1.0"
@@ -38,8 +38,8 @@ master_doc = "index"
 language = "en"
 
 html_theme = "sphinx_rtd_theme"
-html_title = "OneOpen Workboard Documentation"
-html_short_title = "Workboard"
+html_title = "OneOpen Loom Documentation"
+html_short_title = "Loom"
 html_static_path = ["_static"]
 html_css_files = ["custom.css"]
 html_logo = "logo.svg"
@@ -52,7 +52,7 @@ html_theme_options = {
     "logo_only": False,
     "prev_next_buttons_location": "bottom",
     "style_external_links": True,
-    "style_nav_header_background": "#0f766e",
+    "style_nav_header_background": "#1e293b",
     "collapse_navigation": False,
     "sticky_navigation": True,
     "navigation_depth": 3,

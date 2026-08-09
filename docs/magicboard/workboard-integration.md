@@ -1,45 +1,48 @@
 # Workboard integration
 
-Magicboard and Workboard share Loom workspace identity (login, members, branding).
+Magicboard and Workboard can share Loom workspace identity (login, members, branding) and an **optional HTTP connector**.
+
+Magicboard runs **without** Workboard. Integration is env-gated.
+
+## Connector configuration
+
+| Side | Variable | Purpose |
+|------|----------|---------|
+| Magicboard API | `WORKBOARD_API_URL` | Base URL of Workboard API (e.g. `http://localhost:8001`) |
+| Magicboard SPA | `VITE_WORKBOARD_APP_URL` | Deep links into Workboard UI |
+| Workboard SPA | `VITE_MAGICBOARD_APP_URL` | Open Magicboard from Workboard |
+| Workboard | Magicboard API URL vars | Docs panel / redirects (see `platform/README.md`) |
+
+`GET /health` on Magicboard reports `workboard_connector: true|false`.
 
 ## Linked documentation on work items
 
-On a work item detail page, the **Documentation** panel can:
+On a Workboard work item, the **Documentation** panel can list, link, create, and unlink Magicboard pages (when the Workboard app is wired to Magicboard).
 
-- List linked Magicboard pages  
-- Link an existing page  
-- Create a page from a template in a chosen space  
-- Unlink a page  
-- Open the page in Magicboard  
+Typical APIs (Workboard side / shared contract):
 
-APIs:
+- `POST/GET /work-items/{id}/pages`
+- `DELETE /work-items/{id}/pages/{page_id}`
+- `GET /pages/{id}/work-items`
 
-- `POST/GET /work-items/{id}/pages`  
-- `DELETE /work-items/{id}/pages/{page_id}`  
-- `GET /pages/{id}/work-items`  
+## Work item smart cards
 
-## Work item macros in pages
+In Magicboard TipTap, use **Insert → Work item** (or `/` → Work item) to search and insert a smart card.
 
-In Magicboard page content:
+Connector routes on Magicboard:
 
-```text
-{{workitem:PROJ-12}}
-```
+- `GET /workspaces/{id}/connector/work-items/search?q=`
+- `GET /workspaces/{id}/connector/work-items/by-key/{key}`
 
-The editor preview loads a live card via `GET /workspaces/{id}/work-items/by-key/{key}`.
+Legacy markdown `{{workitem:PROJ-12}}` still converts to a card node.
 
-Other macros:
-
-| Macro | Effect |
-|-------|--------|
-| `{{toc}}` | Table of contents from headings |
-| `{{info:message}}` | Callout panel |
-| `{{include:page-slug}}` | Transclude another page body |
-
-## Automation
-
-Workflow **post-function** `create_magicboard_page` (config: `space_id`, optional `template_key`, `title`) creates a page and links it when a work item transitions.
+UI labels say **Work item** (not third-party tracker names).
 
 ## Suite search
 
-`GET /workspaces/{id}/suite-search?q=` returns Magicboard pages and Workboard items together.
+`GET /workspaces/{id}/suite-search?q=` returns Magicboard pages; when the connector is enabled, Workboard hits are merged into `work_items`.
+
+## See also
+
+- ``platform/README.md`` — shared identity and env contract  
+- ``workboard/connectors/magicboard/`` — connector notes in the repo  

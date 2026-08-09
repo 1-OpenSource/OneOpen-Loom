@@ -1,29 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="OneOpen Workboard">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="OneOpen Loom">
   <defs>
-    <linearGradient id="bg" x1="18%" y1="8%" x2="86%" y2="94%">
-      <stop offset="0%" stop-color="#ff9a3c"/>
-      <stop offset="45%" stop-color="#e86a17"/>
-      <stop offset="100%" stop-color="#c5383b"/>
+    <linearGradient id="loom-bg" x1="10%" y1="0%" x2="90%" y2="100%">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="45%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
     </linearGradient>
-    <linearGradient id="shine" x1="20%" y1="0%" x2="50%" y2="55%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28"/>
+    <linearGradient id="loom-shine" x1="20%" y1="0%" x2="55%" y2="60%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.2"/>
       <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <rect width="128" height="128" rx="30" fill="url(#bg)"/>
-  <rect width="128" height="128" rx="30" fill="url(#shine)"/>
-  <!-- Kanban board: three columns of cards -->
-  <g fill="#ffffff">
-    <rect x="28" y="34" width="20" height="14" rx="4"/>
-    <rect x="28" y="54" width="20" height="14" rx="4" opacity="0.88"/>
-    <rect x="28" y="74" width="20" height="14" rx="4" opacity="0.7"/>
-
-    <rect x="54" y="34" width="20" height="14" rx="4"/>
-    <rect x="54" y="54" width="20" height="14" rx="4" opacity="0.88"/>
-
-    <rect x="80" y="34" width="20" height="14" rx="4"/>
-    <rect x="80" y="54" width="20" height="14" rx="4" opacity="0.88"/>
-    <rect x="80" y="74" width="20" height="14" rx="4" opacity="0.7"/>
-    <rect x="80" y="94" width="20" height="10" rx="3" opacity="0.45"/>
+  <rect width="128" height="128" rx="30" fill="url(#loom-bg)"/>
+  <rect width="128" height="128" rx="30" fill="url(#loom-shine)"/>
+  <!-- Interlaced loom threads (suite umbrella mark) -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Warp (vertical) -->
+    <path d="M40 30v68" stroke="#94a3b8" stroke-width="5"/>
+    <path d="M56 30v68" stroke="#cbd5e1" stroke-width="5"/>
+    <path d="M72 30v68" stroke="#94a3b8" stroke-width="5"/>
+    <path d="M88 30v68" stroke="#cbd5e1" stroke-width="5"/>
+    <!-- Weft (horizontal), weaving over/under -->
+    <path d="M30 46h68" stroke="#e2e8f0" stroke-width="5" opacity="0.95"/>
+    <path d="M30 62h68" stroke="#f8fafc" stroke-width="5"/>
+    <path d="M30 78h68" stroke="#e2e8f0" stroke-width="5" opacity="0.95"/>
+    <!-- Accent threads hinting at product colors without copying their marks -->
+    <path d="M30 54h28" stroke="#e86a17" stroke-width="3.5" opacity="0.85"/>
+    <path d="M70 70h28" stroke="#14b8a6" stroke-width="3.5" opacity="0.9"/>
   </g>
 </svg>

@@ -84,6 +84,7 @@ class SpacePageTreeNode(BaseModel):
     title: str
     slug: str
     position: int
+    status: SpacePageStatus = SpacePageStatus.PUBLISHED
     children: list["SpacePageTreeNode"] = Field(default_factory=list)
 
 

@@ -1,0 +1,13 @@
+{
+  "name": "oneopen-magicboard-collab",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs",
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "@hocuspocus/server": "4.5.0"
+  }
+}

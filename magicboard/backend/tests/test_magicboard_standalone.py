@@ -1,3 +1,5 @@
+from io import BytesIO
+
 from fastapi.testclient import TestClient
 
 
@@ -36,6 +38,20 @@ def test_magicboard_standalone_space_and_page(client: TestClient, auth_headers: 
     body = search.json()
     assert body["work_items"] == []
     assert any(hit["title"] == "Home" for hit in body["pages"])
+
+    upload = client.post(
+        f"/api/pages/{page['id']}/attachments",
+        headers=auth_headers,
+        files={"file": ("note.txt", BytesIO(b"hello magicboard"), "text/plain")},
+    )
+    assert upload.status_code == 201
+    attachment = upload.json()
+    download = client.get(
+        f"/api/page-attachments/{attachment['id']}/download",
+        headers=auth_headers,
+    )
+    assert download.status_code == 200
+    assert download.content == b"hello magicboard"
 
 
 def test_health_reports_standalone(client: TestClient) -> None:

@@ -17,6 +17,7 @@ function TreeNode({
   const [expanded, setExpanded] = useState(true);
   const hasChildren = node.children.length > 0;
   const isActive = node.id === activePageId;
+  const isDraft = node.status === "DRAFT";
 
   return (
     <li className="magicboard-tree-node">
@@ -36,6 +37,7 @@ function TreeNode({
         <Link to={`/magicboard/spaces/${spaceId}/pages/${node.id}`} className="magicboard-tree-link">
           <FileText size={14} />
           <span>{node.title}</span>
+          {isDraft ? <span className="mb-page-status-badge is-draft">Draft</span> : null}
         </Link>
       </div>
       {hasChildren && expanded ? (

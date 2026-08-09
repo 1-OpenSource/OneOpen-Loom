@@ -1,14 +1,14 @@
 import type { FormEvent } from "react";
 import { useEffect, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import { useAuth } from "../hooks/useAuth";
 import { authService } from "../services/authService";
+import { getApiErrorMessage } from "../utils/getApiErrorMessage";
 
 export default function LoginPage() {
-  const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isAuthenticated, isLoading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -34,7 +34,7 @@ export default function LoginPage() {
     };
   }, []);
 
-  if (needsOwner === null) {
+  if (isLoading || needsOwner === null) {
     return <div className="screen-message">Loading</div>;
   }
 
@@ -42,16 +42,20 @@ export default function LoginPage() {
     return <Navigate to="/register" replace />;
   }
 
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     setError(null);
     setIsSubmitting(true);
     try {
-      await login({ email, password });
-      navigate("/workspaces");
-    } catch {
-      setError("Email or password was not accepted.");
-    } finally {
+      await login({ email: email.trim(), password });
+      // Full reload avoids stale auth/layout state after login.
+      window.location.assign("/");
+    } catch (loginError) {
+      setError(getApiErrorMessage(loginError, "Email or password was not accepted."));
       setIsSubmitting(false);
     }
   }
@@ -75,7 +79,7 @@ export default function LoginPage() {
             required
           />
           <Button type="submit" disabled={isSubmitting}>
-            Login
+            {isSubmitting ? "Signing in…" : "Login"}
           </Button>
         </form>
         <p className="auth-switch">

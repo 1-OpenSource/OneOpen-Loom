@@ -113,6 +113,7 @@ export type InlineNode =
   | { type: "image"; src: string; alt: string };
 
 export type BlockNode =
+  | { type: "heading"; level: 1 | 2 | 3 | 4 | 5 | 6; children: InlineNode[] }
   | { type: "paragraph"; children: InlineNode[] }
   | { type: "quote"; children: InlineNode[] }
   | { type: "list"; ordered: boolean; items: InlineNode[][] };
@@ -171,6 +172,17 @@ export function parseMarkdown(source: string): BlockNode[] {
       continue;
     }
 
+    const headingMatch = /^(#{1,6})\s+(.+)$/.exec(line.trim());
+    if (headingMatch) {
+      blocks.push({
+        type: "heading",
+        level: headingMatch[1].length as 1 | 2 | 3 | 4 | 5 | 6,
+        children: parseInlines(headingMatch[2].trim())
+      });
+      index += 1;
+      continue;
+    }
+
     if (/^>\s?/.test(line)) {
       const quoteLines: string[] = [];
       while (index < lines.length && /^>\s?/.test(lines[index])) {
@@ -205,6 +217,7 @@ export function parseMarkdown(source: string): BlockNode[] {
     while (
       index < lines.length &&
       lines[index].trim() &&
+      !/^#{1,6}\s+/.test(lines[index].trim()) &&
       !/^>\s?/.test(lines[index]) &&
       !/^\s*[-*]\s+/.test(lines[index]) &&
       !/^\s*\d+\.\s+/.test(lines[index])

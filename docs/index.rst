@@ -1,76 +1,76 @@
-OneOpen Workboard documentation
-=================================
+OneOpen Loom documentation
+==========================
 
-**OneOpen Workboard** is the work-management product in the
-**OneOpen Loom** collaboration suite.
+**OneOpen Loom** is the open-source **collaboration suite** in
+`OneOpenSource <https://oneopensource.org>`_.
 
-Use Workboard to plan and deliver software and service work: workspaces,
-projects, work items, backlog ranking, Kanban workboards, sprints, workflows,
-OQL search, service queues, dashboards, and workspace administration.
+Loom is the **umbrella**, not a single application. It hosts products that
+share workspace identity and optional integrations:
+
+* **OneOpen Workboard** — work management and delivery
+* **OneOpen Magicboard** — knowledge, spaces, and pages
 
 .. important::
 
-   **Loom ≠ Workboard.**
+   **Loom ≠ Workboard ≠ Magicboard.**
 
-   * **OneOpen Loom** — the open-source *suite* (umbrella) that will host several products.
-   * **OneOpen Workboard** — the *work management* product (this documentation).
-
-   This Sphinx site documents **Workboard**. For the suite overview, see the
-   repository `README <https://github.com/1-OpenSource/OneOpen-Loom>`_.
+   * **Loom** — the suite (this documentation site).
+   * **Workboard** — track and deliver work (``backend/`` + ``frontend/``).
+   * **Magicboard** — team knowledge (``magicboard/``), runs independently.
 
 .. note::
 
-   Built with Sphinx and the classic
+   Built with Sphinx and the
    `Read the Docs <https://docs.readthedocs.io/>`_ theme.
+   Suite mark: ``docs/logo.svg``. Product marks live under
+   ``docs/workboard/logo.svg`` and ``docs/magicboard/logo.svg``.
 
-Quick start
------------
+Suite quick start
+-----------------
 
-.. code-block:: bash
+**Prerequisites:** Python 3.12+, Node.js 20+
+
+Workboard (API ``:8001``, SPA ``:5173``)::
 
    cd backend
-   python -m venv .venv
-   # Windows: .\.venv\Scripts\Activate.ps1
-   # macOS/Linux: source .venv/bin/activate
-   pip install -r requirements.txt
+   python -m pip install -r requirements.txt
    cp .env.example .env
    alembic upgrade head
    python -m app.scripts.seed
-   uvicorn app.main:app --reload --port 8000
-
-.. code-block:: bash
+   uvicorn app.main:app --reload --port 8001
 
    cd frontend
    npm install
    npm run dev
 
-Open http://localhost:5173 and sign in (after seed) with
-``akhil@oneopen.dev`` / ``password123``.
+Magicboard (API ``:8002``, SPA ``:5174``)::
+
+   cd magicboard/backend
+   python -m pip install -r requirements.txt
+   cp .env.example .env
+   python -m app.scripts.seed
+   uvicorn app.main:app --reload --port 8002
+
+   cd magicboard/frontend
+   npm install
+   npm run dev
+
+After seed, sign in with ``akhil@oneopen.dev`` / ``password123``.
 
 Contents
 --------
 
 .. toctree::
    :maxdepth: 2
-   :caption: Getting started
+   :caption: Workboard
 
    workboard/overview
    workboard/quickstart
    workboard/concepts
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Using Workboard
-
    workboard/projects-and-items
    workboard/workboard-board
    workboard/workflows-and-admin
    workboard/service-and-spaces
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Develop & roadmap
-
    workboard/development
    workboard/roadmap
    workboard/gap-analysis
@@ -80,8 +80,13 @@ Contents
    :caption: Magicboard
 
    magicboard/overview
+   magicboard/quickstart
+   magicboard/concepts
    magicboard/authoring
+   magicboard/collaboration
    magicboard/workboard-integration
+   magicboard/development
+   magicboard/branding
 
 Indices
 -------

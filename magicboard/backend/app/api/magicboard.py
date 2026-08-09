@@ -1,6 +1,7 @@
 import uuid
 
 from fastapi import APIRouter, Depends, File, HTTPException, Query, Request, UploadFile, status
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_current_user
@@ -32,6 +33,7 @@ from app.schemas.space import (
     SpaceUpdate,
 )
 from app.services.space_service import SpaceService
+from app.services.storage_service import StorageService
 from app.services.workboard_connector import WorkboardConnector
 
 router = APIRouter(tags=["magicboard"])
@@ -383,6 +385,21 @@ def upload_page_attachment(
     return SpaceService(db).upload_page_attachment(page_id, file, current_user)
 
 
+@router.get("/page-attachments/{attachment_id}/download")
+def download_page_attachment(
+    attachment_id: uuid.UUID,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    attachment = SpaceService(db).get_page_attachment(attachment_id, current_user)
+    absolute_path = StorageService().absolute_path(attachment.storage_path)
+    return FileResponse(
+        absolute_path,
+        media_type=attachment.content_type or "application/octet-stream",
+        filename=attachment.filename,
+    )
+
+
 @router.delete("/page-attachments/{attachment_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_page_attachment(
     attachment_id: uuid.UUID,
@@ -422,6 +439,22 @@ def connector_work_item_by_key(
     if not item:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Work item not found or Workboard not connected.")
     return item
+
+
+@router.get("/workspaces/{workspace_id}/connector/work-items/search")
+def connector_work_items_search(
+    workspace_id: uuid.UUID,
+    request: Request,
+    q: str = Query(default="", min_length=1),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    SpaceService(db).access.require_workspace_member(workspace_id, current_user)
+    auth = request.headers.get("Authorization")
+    connector = WorkboardConnector(authorization=auth)
+    if not connector.enabled:
+        return []
+    return connector.search_work_items(workspace_id, q)
 
 
 @router.get(

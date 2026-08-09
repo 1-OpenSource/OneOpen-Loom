@@ -1,4 +1,4 @@
-const TOKEN_KEY = "oneopen_workboard_token";
+const TOKEN_KEY = "oneopen_magicboard_token";
 
 export function getAuthToken(): string | null {
   return localStorage.getItem(TOKEN_KEY);

@@ -1,14 +1,12 @@
-import { Archive, Download, FilePlus, Plus, Users } from "lucide-react";
+import { Archive, Download, FilePlus, MoreHorizontal, Plus, Users } from "lucide-react";
 import type { FormEvent } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import PageTree from "../../components/magicboard/PageTree";
 import Button from "../../components/ui/Button";
-import Card from "../../components/ui/Card";
 import EmptyState from "../../components/ui/EmptyState";
 import Input from "../../components/ui/Input";
 import Modal from "../../components/ui/Modal";
-import PageHeader from "../../components/ui/PageHeader";
 import Select from "../../components/ui/Select";
 import { useToast } from "../../components/ui/ToastProvider";
 import { useApi } from "../../hooks/useApi";
@@ -28,8 +26,13 @@ export default function MagicboardSpacePage() {
   const { spaceId = "", pageId } = useParams();
   const navigate = useNavigate();
   const { pushToast } = useToast();
-  const workspaceId = getActiveWorkspaceId() ?? "";
-  const { data: space, reload: reloadSpace } = useApi(() => magicboardService.getSpace(spaceId), [spaceId]);
+  const {
+    data: space,
+    isLoading: isSpaceLoading,
+    error: spaceError,
+    reload: reloadSpace
+  } = useApi(() => magicboardService.getSpace(spaceId), [spaceId]);
+  const workspaceId = space?.workspace_id || getActiveWorkspaceId() || "";
   const { data: tree, reload: reloadTree } = useApi(() => magicboardService.getPageTree(spaceId), [spaceId]);
   const { data: templates } = useApi(() => magicboardService.listTemplates(), []);
   const { data: members, reload: reloadMembers } = useApi(
@@ -43,10 +46,19 @@ export default function MagicboardSpacePage() {
   const [isPageModalOpen, setIsPageModalOpen] = useState(false);
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
   const [isMembersOpen, setIsMembersOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const [pageTitle, setPageTitle] = useState("");
   const [templateKey, setTemplateKey] = useState("");
   const [templateTitle, setTemplateTitle] = useState("");
   const [memberDraft, setMemberDraft] = useState<Array<{ user_id: string; role: SpaceMemberRole }>>([]);
+
+  useEffect(() => {
+    function onCreatePage() {
+      setIsPageModalOpen(true);
+    }
+    window.addEventListener("magicboard:create-page", onCreatePage);
+    return () => window.removeEventListener("magicboard:create-page", onCreatePage);
+  }, []);
 
   async function handleCreatePage(event: FormEvent) {
     event.preventDefault();
@@ -56,7 +68,7 @@ export default function MagicboardSpacePage() {
       setPageTitle("");
       setIsPageModalOpen(false);
       await reloadTree();
-      navigate(`/magicboard/spaces/${spaceId}/pages/${page.id}`);
+      navigate(`/magicboard/spaces/${spaceId}/pages/${page.id}?edit=1`);
     } catch (createError) {
       pushToast(getApiErrorMessage(createError, "Could not create page"), "error");
     }
@@ -74,7 +86,7 @@ export default function MagicboardSpacePage() {
       setTemplateTitle("");
       setIsTemplateModalOpen(false);
       await reloadTree();
-      navigate(`/magicboard/spaces/${spaceId}/pages/${page.id}`);
+      navigate(`/magicboard/spaces/${spaceId}/pages/${page.id}?edit=1`);
     } catch (createError) {
       pushToast(getApiErrorMessage(createError, "Could not create page from template"), "error");
     }
@@ -109,6 +121,7 @@ export default function MagicboardSpacePage() {
   function openMembersModal() {
     setMemberDraft((members ?? []).map((member) => ({ user_id: member.user_id, role: member.role })));
     setIsMembersOpen(true);
+    setMoreOpen(false);
   }
 
   async function handleSaveMembers(event: FormEvent) {
@@ -139,60 +152,92 @@ export default function MagicboardSpacePage() {
     );
   }
 
-  if (!space) {
+  if (isSpaceLoading) {
     return <div className="state-text">Loading space…</div>;
+  }
+  if (!space) {
+    return <div className="error-banner">{spaceError || "Space not found."}</div>;
   }
 
   return (
-    <div className="magicboard-layout">
-      <aside className="magicboard-sidebar">
-        <PageHeader
-          compact
-          eyebrow={space.key}
-          title={space.name}
-          description={space.description ?? undefined}
-        />
-        <div className="button-row magicboard-sidebar-actions">
+    <div className="mb-space">
+      <aside className="mb-space-nav">
+        <div className="mb-space-nav-head">
+          <Link to="/" className="mb-space-nav-crumb">
+            Spaces
+          </Link>
+          <h1>{space.name}</h1>
+          <p className="mb-quiet">{space.description || space.key}</p>
+        </div>
+        <div className="mb-space-nav-actions">
           <Button icon={<Plus size={14} />} onClick={() => setIsPageModalOpen(true)}>
-            Page
+            Create
           </Button>
           <Button variant="secondary" icon={<FilePlus size={14} />} onClick={() => setIsTemplateModalOpen(true)}>
-            Template
+            Templates
           </Button>
+          <div className="mb-space-more">
+            <Button
+              variant="secondary"
+              icon={<MoreHorizontal size={14} />}
+              onClick={() => setMoreOpen((value) => !value)}
+              aria-label="More space actions"
+            />
+            {moreOpen ? (
+              <div className="mb-topnav-menu mb-space-more-menu" role="menu">
+                <button type="button" role="menuitem" onClick={openMembersModal}>
+                  <Users size={14} /> Members
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setMoreOpen(false);
+                    void handleExport();
+                  }}
+                >
+                  <Download size={14} /> Export
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="is-danger"
+                  onClick={() => {
+                    setMoreOpen(false);
+                    void handleArchiveSpace();
+                  }}
+                >
+                  <Archive size={14} /> Archive
+                </button>
+              </div>
+            ) : null}
+          </div>
         </div>
-        <PageTree tree={tree ?? []} spaceId={spaceId} activePageId={pageId} />
-        <div className="magicboard-sidebar-footer">
-          <Button variant="secondary" icon={<Users size={14} />} onClick={openMembersModal}>
-            Members
-          </Button>
-          <Button variant="secondary" icon={<Download size={14} />} onClick={() => void handleExport()}>
-            Export
-          </Button>
-          <Button variant="danger" icon={<Archive size={14} />} onClick={() => void handleArchiveSpace()}>
-            Archive
-          </Button>
+        <div className="mb-space-tree-wrap">
+          <p className="mb-space-tree-label">Content</p>
+          <PageTree tree={tree ?? []} spaceId={spaceId} activePageId={pageId} />
         </div>
       </aside>
 
-      <main className="magicboard-main">
+      <section className="mb-space-canvas">
         {pageId ? (
           <Outlet context={{ space, workspaceId, onTreeChange: reloadTree }} />
         ) : (
-          <Card>
+          <div className="mb-page-blank">
             <EmptyState
-              title="Select or create a page"
-              description="Choose a page from the tree or create a new one to get started."
+              title="Select a page"
+              description="Choose a page from the sidebar, or create one to start writing."
               action={
                 <Button icon={<Plus size={16} />} onClick={() => setIsPageModalOpen(true)}>
-                  New Page
+                  Create page
                 </Button>
               }
             />
-          </Card>
+          </div>
         )}
-      </main>
+      </section>
 
-      <Modal isOpen={isPageModalOpen} title="New Page" onClose={() => setIsPageModalOpen(false)}>
+      <Modal isOpen={isPageModalOpen} title="Create page" onClose={() => setIsPageModalOpen(false)}>
         <form className="form-stack" onSubmit={handleCreatePage}>
           <Input label="Title" value={pageTitle} onChange={(event) => setPageTitle(event.target.value)} required />
           <div className="modal-actions">
@@ -204,7 +249,7 @@ export default function MagicboardSpacePage() {
         </form>
       </Modal>
 
-      <Modal isOpen={isTemplateModalOpen} title="New Page from Template" onClose={() => setIsTemplateModalOpen(false)}>
+      <Modal isOpen={isTemplateModalOpen} title="Create from template" onClose={() => setIsTemplateModalOpen(false)}>
         <form className="form-stack" onSubmit={handleCreateFromTemplate}>
           <Select
             label="Template"
@@ -230,7 +275,7 @@ export default function MagicboardSpacePage() {
         </form>
       </Modal>
 
-      <Modal isOpen={isMembersOpen} title="Space Members" onClose={() => setIsMembersOpen(false)}>
+      <Modal isOpen={isMembersOpen} title="Space members" onClose={() => setIsMembersOpen(false)}>
         <form className="form-stack" onSubmit={handleSaveMembers}>
           <div className="list-stack">
             {(workspaceMembers ?? []).map((member) => {
@@ -264,12 +309,6 @@ export default function MagicboardSpacePage() {
           </div>
         </form>
       </Modal>
-
-      <div className="magicboard-breadcrumb">
-        <Link to="/magicboard">Magicboard</Link>
-        <span>/</span>
-        <span>{space.name}</span>
-      </div>
     </div>
   );
 }

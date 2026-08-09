@@ -29,7 +29,7 @@
 
 **OneOpen Loom** is the open-source **collaboration suite** in [OneOpenSource](https://oneopensource.org).
 
-Loom is the **umbrella** — not a single app. Products share workspace identity, branding, and integrations.
+Loom is the **umbrella** — not a single app. Products share workspace identity, branding, and integrations. The suite mark (slate weave above) is distinct from each product logo.
 
 | | |
 |---|---|
@@ -44,6 +44,16 @@ Loom is the **umbrella** — not a single app. Products share workspace identity
 
 ## Products
 
+<p align="center">
+  <img src="docs/workboard/logo.svg" alt="OneOpen Workboard" width="64" height="64">
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="docs/magicboard/logo.svg" alt="OneOpen Magicboard" width="64" height="64">
+</p>
+
+<p align="center">
+  <strong>Workboard</strong> (orange) · <strong>Magicboard</strong> (teal)
+</p>
+
 ### OneOpen Workboard
 
 Workspaces, projects, work items, backlog, Kanban workboard, sprints, OQL, workflows, service queues, dashboards, administration.
@@ -51,11 +61,12 @@ Workspaces, projects, work items, backlog, Kanban workboard, sprints, OQL, workf
 | | |
 |---|---|
 | UI | React app (`frontend/`) — project routes, `/workspaces/...` |
-| API | FastAPI (`backend/`) |
+| API | FastAPI (`backend/`) — http://localhost:8001 |
+| Mark | [`docs/workboard/logo.svg`](docs/workboard/logo.svg) |
 
 ### OneOpen Magicboard
 
-Team knowledge: spaces, hierarchical pages, templates, versions, comments, watch/favorites, search, Markdown macros, import/export.
+Team knowledge: spaces, hierarchical pages, TipTap WYSIWYG authoring, draft/publish, templates, versions, comments, watch/favorites, search, import/export, optional live collaboration.
 
 **Magicboard is an independent product** — it has its own API and SPA under [`magicboard/`](magicboard/) and can run without Workboard installed.
 
@@ -63,13 +74,13 @@ Team knowledge: spaces, hierarchical pages, templates, versions, comments, watch
 |---|---|
 | UI | `magicboard/frontend` → http://localhost:5174 |
 | API | `magicboard/backend` → http://localhost:8002 |
-| Docs | `magicboard/docs/` (+ Sphinx `docs/magicboard/`) |
+| Docs | `magicboard/docs/` + Sphinx `docs/magicboard/` |
+| Mark | [`docs/magicboard/logo.svg`](docs/magicboard/logo.svg) |
 
 **Optional Workboard ↔ Magicboard connector** (env-gated):
 
 - Documentation panel on work items (when `VITE_MAGICBOARD_*` set)  
-- `{{workitem:KEY}}` embeds (when `WORKBOARD_API_URL` / `VITE_WORKBOARD_*` set)  
-- Suite search across pages + work items  
+- Work-item smart cards / suite search (when `WORKBOARD_API_URL` / `VITE_WORKBOARD_*` set)  
 - See [`workboard/connectors/magicboard/`](workboard/connectors/magicboard/) and [`platform/README.md`](platform/README.md)
 
 ---
@@ -82,7 +93,10 @@ OneOpen-Loom/
 ├── platform/             # Shared identity contract (JWT, workspaces)
 ├── magicboard/           # Standalone Magicboard (API + SPA + docs)
 ├── workboard/connectors/ # Optional Magicboard integration notes
-├── docs/                 # Suite Sphinx
+├── docs/                 # Suite Sphinx (Loom + Workboard + Magicboard)
+│   ├── logo.svg          # Loom suite mark
+│   ├── workboard/        # Workboard guide + product logo
+│   └── magicboard/       # Magicboard guide + product logo
 ├── backend/              # Workboard API
 ├── frontend/             # Workboard SPA
 ├── docker-compose.yml
@@ -153,6 +167,8 @@ Details: [RUNBOOK.md](RUNBOOK.md).
 
 ## Documentation
 
+Sphinx documents the **entire Loom suite** (Workboard + Magicboard):
+
 ```bash
 cd docs
 python -m pip install -r requirements-docs.txt
@@ -163,6 +179,7 @@ Open `docs/_build/html/index.html`.
 
 | Section | Path |
 |---------|------|
+| Suite landing | `docs/index.rst` |
 | Workboard guide | `docs/workboard/` |
 | Magicboard guide | `docs/magicboard/` |
 | Ops | [RUNBOOK.md](RUNBOOK.md) |

@@ -75,6 +75,7 @@ export interface SpacePageTreeNode {
   title: string;
   slug: string;
   position: number;
+  status: SpacePageStatus;
   children: SpacePageTreeNode[];
 }
 

@@ -20,6 +20,7 @@ import Select from "../components/ui/Select";
 import SearchableSelect from "../components/ui/SearchableSelect";
 import StatusBadge from "../components/ui/StatusBadge";
 import { useAuth } from "../hooks/useAuth";
+import { autosaveLabel, useAutosave } from "../hooks/useAutosave";
 import { activityService } from "../services/activityService";
 import { commentService } from "../services/commentService";
 import { projectService } from "../services/projectService";
@@ -224,6 +225,38 @@ export default function WorkItemDetailPage() {
     [workItem, isSaving, pushToast]
   );
 
+  const saveDescriptionDraft = useCallback(async () => {
+    if (!workItem) return;
+    const next = description || null;
+    if ((workItem.description ?? "") === (next ?? "")) return;
+    const updated = await workItemService.updateWorkItem(workItem.id, { description: next });
+    setWorkItem(updated);
+  }, [workItem, description]);
+
+  const saveAcceptanceDraft = useCallback(async () => {
+    if (!workItem) return;
+    const next = acceptanceCriteria || null;
+    if ((workItem.acceptance_criteria ?? "") === (next ?? "")) return;
+    const updated = await workItemService.updateWorkItem(workItem.id, { acceptance_criteria: next });
+    setWorkItem(updated);
+  }, [workItem, acceptanceCriteria]);
+
+  const descriptionAutosave = useAutosave({
+    enabled: editingField === "description" && Boolean(workItem),
+    resetKey: `${workItem?.id ?? ""}:description`,
+    snapshot: description,
+    delayMs: 1500,
+    save: saveDescriptionDraft
+  });
+
+  const acceptanceAutosave = useAutosave({
+    enabled: editingField === "acceptance" && Boolean(workItem),
+    resetKey: `${workItem?.id ?? ""}:acceptance`,
+    snapshot: acceptanceCriteria,
+    delayMs: 1500,
+    save: saveAcceptanceDraft
+  });
+
   function cancelEdit() {
     if (!workItem) return;
     applyWorkItem(workItem);
@@ -359,6 +392,22 @@ export default function WorkItemDetailPage() {
         }
         actions={
           <div className="button-row">
+            {editingField === "description" && autosaveLabel(descriptionAutosave) ? (
+              <span
+                className={`autosave-status${descriptionAutosave === "error" ? " is-error" : ""}`}
+                aria-live="polite"
+              >
+                {autosaveLabel(descriptionAutosave)}
+              </span>
+            ) : null}
+            {editingField === "acceptance" && autosaveLabel(acceptanceAutosave) ? (
+              <span
+                className={`autosave-status${acceptanceAutosave === "error" ? " is-error" : ""}`}
+                aria-live="polite"
+              >
+                {autosaveLabel(acceptanceAutosave)}
+              </span>
+            ) : null}
             <Link to={`/projects/${workItem.project_id}/work-items`}>
               <Button variant="secondary" icon={<ListChecks size={16} />}>
                 Backlog

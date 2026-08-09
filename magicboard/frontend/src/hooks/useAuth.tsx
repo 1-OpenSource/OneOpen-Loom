@@ -13,6 +13,7 @@ import { clearAuthToken, getAuthToken, setAuthToken } from "../utils/authToken";
 
 interface AuthContextValue {
   user: User | null;
+  token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (payload: LoginRequest) => Promise<void>;
@@ -25,15 +26,17 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(() => getAuthToken());
   const [isLoading, setIsLoading] = useState(true);
 
   const refreshUser = useCallback(async () => {
-    const token = getAuthToken();
-    if (!token) {
+    const stored = getAuthToken();
+    if (!stored) {
+      setToken(null);
       setUser(null);
       return;
     }
-
+    setToken(stored);
     const currentUser = await authService.me();
     setUser(currentUser);
   }, []);
@@ -42,14 +45,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     refreshUser()
       .catch(() => {
         clearAuthToken();
+        setToken(null);
         setUser(null);
       })
       .finally(() => setIsLoading(false));
   }, [refreshUser]);
 
   const login = useCallback(async (payload: LoginRequest) => {
-    const token = await authService.login(payload);
-    setAuthToken(token.access_token);
+    const result = await authService.login(payload);
+    setAuthToken(result.access_token);
+    setToken(result.access_token);
     const currentUser = await authService.me();
     setUser(currentUser);
   }, []);
@@ -60,6 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     clearAuthToken();
+    setToken(null);
     setUser(null);
     window.location.assign("/login");
   }, []);
@@ -67,14 +73,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       user,
-      isAuthenticated: Boolean(user),
+      token,
+      isAuthenticated: Boolean(user) || Boolean(token),
       isLoading,
       login,
       register,
       logout,
       refreshUser
     }),
-    [user, isLoading, login, register, logout, refreshUser]
+    [user, token, isLoading, login, register, logout, refreshUser]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

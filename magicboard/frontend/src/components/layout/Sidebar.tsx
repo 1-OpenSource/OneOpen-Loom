@@ -27,7 +27,7 @@ function SidebarLink({
 }) {
   return (
     <NavLink
-      className={({ isActive }) => `sidebar-link${isActive ? " active" : ""}`}
+      className={({ isActive }) => `sidebar-link${collapsed ? " collapsed-link" : ""}${isActive ? " active" : ""}`}
       to={to}
       end={end}
       title={label}
@@ -75,95 +75,109 @@ export default function Sidebar() {
 
   const brandName = brandedWorkspace?.brand_name || brandedWorkspace?.name || "Magicboard";
   const brandSubtitle = brandedWorkspace?.brand_tagline || "Magicboard";
+  const closeMobile = () => setMobileOpen(false);
 
   return (
-    <>
-      <button type="button" className="sidebar-mobile-toggle" onClick={() => setMobileOpen(true)} aria-label="Open menu">
-        <Menu size={18} />
-      </button>
-      {mobileOpen ? <button type="button" className="sidebar-backdrop" onClick={() => setMobileOpen(false)} /> : null}
-      <aside className={`sidebar${collapsed ? " collapsed" : ""}${mobileOpen ? " mobile-open" : ""}`}>
-        <div className="sidebar-brand">
-          <div className="sidebar-brand-lockup">
-            <img
-              src={brandedWorkspace?.logo_url || "/icon.svg"}
-              alt=""
-              className="sidebar-brand-logo"
-            />
-            {!collapsed ? (
-              <div>
-                <strong>{brandName}</strong>
-                <p>{brandSubtitle}</p>
-              </div>
-            ) : null}
-          </div>
+    <aside
+      className={`sidebar${collapsed ? " sidebar-collapsed" : ""}${mobileOpen ? " sidebar-mobile-open" : ""}`}
+    >
+      <div className="sidebar-header">
+        <button
+          type="button"
+          className="brand-lockup"
+          title={`${brandName} · ${brandSubtitle}`}
+          onClick={() => navigate("/")}
+        >
+          <img
+            className="brand-mark"
+            src={brandedWorkspace?.logo_url || "/icon.svg"}
+            alt=""
+            width={36}
+            height={36}
+          />
+          {!collapsed ? (
+            <span className="brand-copy">
+              <strong className="brand-title">{brandName}</strong>
+              <span className="brand-subtitle is-product">{brandSubtitle}</span>
+            </span>
+          ) : null}
+        </button>
+        <div className="sidebar-header-actions">
           <button
             type="button"
-            className="sidebar-collapse"
-            onClick={() => setCollapsed((value) => !value)}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            className="icon-button sidebar-mobile-toggle"
+            aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((value) => !value)}
           >
-            {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+            {mobileOpen ? <X size={16} /> : <Menu size={16} />}
           </button>
-          <button type="button" className="sidebar-mobile-close" onClick={() => setMobileOpen(false)} aria-label="Close menu">
-            <X size={16} />
+          <button
+            type="button"
+            className="icon-button sidebar-desktop-toggle"
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            onClick={() => setCollapsed((value) => !value)}
+          >
+            {collapsed ? <ChevronRight size={15} /> : <ChevronLeft size={15} />}
           </button>
         </div>
+      </div>
 
-        {workboardAppUrl ? (
-          <div className="sidebar-product-switcher">
-            <a className="sidebar-product-link" href={workboardAppUrl}>
-              Workboard
-            </a>
-            <span className="sidebar-product-link active">Magicboard</span>
-          </div>
+      <div className="sidebar-panel">
+        {!collapsed ? (
+          <>
+            <label className="sidebar-workspace-switcher">
+              <span>Workspace</span>
+              <select
+                value={selectedWorkspaceId}
+                onChange={(event) => {
+                  const next = event.target.value;
+                  setActiveWorkspaceId(next);
+                  navigate(`/workspaces/${next}`);
+                  closeMobile();
+                }}
+              >
+                {(workspaces ?? []).map((workspace) => (
+                  <option key={workspace.id} value={workspace.id}>
+                    {workspace.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {workboardAppUrl ? (
+              <div className="sidebar-product-switcher" role="group" aria-label="Product">
+                <a className="sidebar-product-link" href={workboardAppUrl} onClick={closeMobile}>
+                  Workboard
+                </a>
+                <span className="sidebar-product-link active">Magicboard</span>
+              </div>
+            ) : null}
+          </>
         ) : null}
 
-        <nav className="sidebar-nav">
+        <nav className="sidebar-nav" aria-label="Primary">
           <SidebarLink
             to="/"
-            icon={<LayoutGrid size={16} />}
+            icon={<LayoutGrid size={18} />}
             label="Spaces"
             collapsed={collapsed}
             end
-            onNavigate={() => setMobileOpen(false)}
+            onNavigate={closeMobile}
           />
           {selectedWorkspaceId ? (
             <SidebarLink
               to={`/workspaces/${selectedWorkspaceId}`}
-              icon={<BookOpen size={16} />}
+              icon={<BookOpen size={18} />}
               label="Workspace"
               collapsed={collapsed}
-              onNavigate={() => setMobileOpen(false)}
+              onNavigate={closeMobile}
             />
           ) : null}
         </nav>
 
-        <div className="sidebar-footer">
-          {!collapsed ? (
-            <>
-              <label className="field">
-                <span>Workspace</span>
-                <select
-                  value={selectedWorkspaceId}
-                  onChange={(event) => {
-                    const next = event.target.value;
-                    setActiveWorkspaceId(next);
-                    navigate(`/workspaces/${next}`);
-                  }}
-                >
-                  {(workspaces ?? []).map((workspace) => (
-                    <option key={workspace.id} value={workspace.id}>
-                      {workspace.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <p className="muted-copy">{user?.email}</p>
-            </>
-          ) : null}
-        </div>
-      </aside>
-    </>
+        {!collapsed && user ? <p className="muted-copy sidebar-user-email">{user.email}</p> : null}
+      </div>
+    </aside>
   );
 }

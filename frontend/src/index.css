@@ -4268,3 +4268,16 @@ tbody tr:hover td {
     grid-template-columns: repeat(7, minmax(80px, 1fr));
   }
 }
+
+.autosave-status {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b778c;
+  align-self: center;
+  white-space: nowrap;
+  margin-right: 4px;
+}
+
+.autosave-status.is-error {
+  color: #b91c1c;
+}

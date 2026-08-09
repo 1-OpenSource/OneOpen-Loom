@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { workItemService } from "../../services/workItemService";
+import { magicboardService } from "../../services/magicboardService";
 import { parseMarkdown, type BlockNode, type InlineNode } from "../../utils/markdown";
 
 function isSafeHttpUrl(url: string): boolean {
@@ -19,7 +19,7 @@ function AttachmentImage({ attachmentId, alt }: { attachmentId: string; alt: str
 
     async function load() {
       try {
-        const response = await workItemService.getAttachmentBlob(attachmentId);
+        const response = await magicboardService.getAttachmentBlob(attachmentId);
         objectUrl = window.URL.createObjectURL(response);
         if (!cancelled) {
           setSrc(objectUrl);
@@ -76,7 +76,7 @@ function renderInlines(nodes: InlineNode[], keyPrefix: string): ReactNode[] {
               key={key}
               type="button"
               className="md-attachment-link"
-              onClick={() => void workItemService.downloadAttachment(attachmentId, node.children[0]?.type === "text" ? node.children[0].value : "attachment")}
+              onClick={() => void magicboardService.downloadAttachment(attachmentId, node.children[0]?.type === "text" ? node.children[0].value : "attachment")}
             >
               {renderInlines(node.children, key)}
             </button>
@@ -109,6 +109,14 @@ function renderBlocks(blocks: BlockNode[]): ReactNode[] {
   return blocks.map((block, index) => {
     const key = `block-${index}`;
     switch (block.type) {
+      case "heading": {
+        const HeadingTag = `h${block.level}` as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+        return (
+          <HeadingTag key={key} className={`md-heading md-heading-${block.level}`}>
+            {renderInlines(block.children, key)}
+          </HeadingTag>
+        );
+      }
       case "paragraph":
         return (
           <p key={key} className="md-paragraph">

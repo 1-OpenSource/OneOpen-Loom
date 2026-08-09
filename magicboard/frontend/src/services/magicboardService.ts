@@ -41,11 +41,9 @@ export const magicboardService = {
     return response.data;
   },
 
-  async getSpace(spaceId: string): Promise<Space | null> {
-    return safeRequest(async () => {
-      const response = await apiClient.get<Space>(`/api/spaces/${spaceId}`);
-      return response.data;
-    }, null);
+  async getSpace(spaceId: string): Promise<Space> {
+    const response = await apiClient.get<Space>(`/api/spaces/${spaceId}`);
+    return response.data;
   },
 
   async updateSpace(spaceId: string, payload: SpaceUpdate): Promise<Space> {
@@ -116,11 +114,9 @@ export const magicboardService = {
     return response.data;
   },
 
-  async getPage(pageId: string): Promise<SpacePage | null> {
-    return safeRequest(async () => {
-      const response = await apiClient.get<SpacePage>(`/api/pages/${pageId}`);
-      return response.data;
-    }, null);
+  async getPage(pageId: string): Promise<SpacePage> {
+    const response = await apiClient.get<SpacePage>(`/api/pages/${pageId}`);
+    return response.data;
   },
 
   async updatePage(pageId: string, payload: SpacePageUpdate): Promise<SpacePage> {
@@ -234,6 +230,16 @@ export const magicboardService = {
     }, null);
   },
 
+  async searchWorkItems(workspaceId: string, query: string): Promise<PageWorkItemSummary[]> {
+    return safeRequest(async () => {
+      const response = await apiClient.get<PageWorkItemSummary[]>(
+        `/api/workspaces/${workspaceId}/connector/work-items/search`,
+        { params: { q: query } }
+      );
+      return response.data;
+    }, []);
+  },
+
   async listPagesForWorkItem(workItemId: string): Promise<SpacePage[]> {
     return safeRequest(async () => {
       const response = await apiClient.get<SpacePage[]>(`/api/work-items/${workItemId}/pages`);
@@ -267,6 +273,25 @@ export const magicboardService = {
 
   async deleteAttachment(attachmentId: string): Promise<void> {
     await apiClient.delete(`/api/page-attachments/${attachmentId}`);
+  },
+
+  async getAttachmentBlob(attachmentId: string): Promise<Blob> {
+    const response = await apiClient.get<Blob>(`/api/page-attachments/${attachmentId}/download`, {
+      responseType: "blob"
+    });
+    return response.data;
+  },
+
+  async downloadAttachment(attachmentId: string, filename: string): Promise<void> {
+    const blob = await this.getAttachmentBlob(attachmentId);
+    const objectUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(objectUrl);
   },
 
   async suiteSearch(workspaceId: string, query: string): Promise<SuiteSearchResult> {

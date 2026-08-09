@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="OneOpen Workboard">
+  <defs>
+    <linearGradient id="wb-bg" x1="18%" y1="8%" x2="86%" y2="94%">
+      <stop offset="0%" stop-color="#ff9a3c"/>
+      <stop offset="45%" stop-color="#e86a17"/>
+      <stop offset="100%" stop-color="#c5383b"/>
+    </linearGradient>
+    <linearGradient id="wb-shine" x1="20%" y1="0%" x2="50%" y2="55%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="30" fill="url(#wb-bg)"/>
+  <rect width="128" height="128" rx="30" fill="url(#wb-shine)"/>
+  <!-- Kanban board: three columns of cards -->
+  <g fill="#ffffff">
+    <rect x="28" y="34" width="20" height="14" rx="4"/>
+    <rect x="28" y="54" width="20" height="14" rx="4" opacity="0.88"/>
+    <rect x="28" y="74" width="20" height="14" rx="4" opacity="0.7"/>
+
+    <rect x="54" y="34" width="20" height="14" rx="4"/>
+    <rect x="54" y="54" width="20" height="14" rx="4" opacity="0.88"/>
+
+    <rect x="80" y="34" width="20" height="14" rx="4"/>
+    <rect x="80" y="54" width="20" height="14" rx="4" opacity="0.88"/>
+    <rect x="80" y="74" width="20" height="14" rx="4" opacity="0.7"/>
+    <rect x="80" y="94" width="20" height="10" rx="3" opacity="0.45"/>
+  </g>
+</svg>

@@ -1,0 +1,24 @@
+{
+  "name": "OneOpen Magicboard",
+  "short_name": "Magicboard",
+  "description": "OneOpen Magicboard — team knowledge and documentation in the OneOpen Loom suite.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#eef5f3",
+  "theme_color": "#0f766e",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

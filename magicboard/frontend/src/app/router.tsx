@@ -13,11 +13,11 @@ import WorkspaceDetailPage from "../pages/WorkspaceDetailPage";
 import WorkspaceListPage from "../pages/WorkspaceListPage";
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
-  const { token, isBootstrapping } = useAuth();
-  if (isBootstrapping) {
+  const { isAuthenticated, isLoading, token } = useAuth();
+  if (isLoading) {
     return <div className="state-text">Loading…</div>;
   }
-  if (!token) {
+  if (!isAuthenticated && !token) {
     return <Navigate to="/login" replace />;
   }
   return children;

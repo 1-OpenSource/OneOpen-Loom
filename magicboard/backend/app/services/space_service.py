@@ -382,6 +382,7 @@ class SpaceService:
                     "title": page.title,
                     "slug": page.slug,
                     "position": page.position,
+                    "status": page.status,
                     "children": build(page.id),
                 }
                 for page in by_parent.get(parent_id, [])
@@ -780,6 +781,15 @@ class SpaceService:
         self.db.add(attachment)
         self.db.commit()
         self.db.refresh(attachment)
+        return attachment
+
+    def get_page_attachment(self, attachment_id: uuid.UUID, user: User) -> SpacePageAttachment:
+        attachment = self.db.get(SpacePageAttachment, attachment_id)
+        if not attachment:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Attachment not found.")
+        page = self._get_page(attachment.page_id)
+        space = self._get_space(page.space_id)
+        self._require_space_role(space, user, SpaceMemberRole.VIEW)
         return attachment
 
     def delete_page_attachment(self, attachment_id: uuid.UUID, user: User) -> None:

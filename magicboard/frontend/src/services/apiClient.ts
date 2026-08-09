@@ -1,7 +1,7 @@
 import axios from "axios";
 import { clearAuthToken, getAuthToken } from "../utils/authToken";
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8002";
 
 export const apiClient = axios.create({
   baseURL: apiBaseUrl,
@@ -31,9 +31,12 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      clearAuthToken();
       const path = window.location.pathname;
-      if (path !== "/login" && path !== "/register") {
+      const isAuthRoute = path === "/login" || path === "/register";
+      // Only clear session for protected routes — avoid wiping a fresh login
+      // when unrelated optional endpoints 401.
+      if (!isAuthRoute && !error.config?.url?.includes("/auth/login")) {
+        clearAuthToken();
         window.location.assign("/login");
       }
     }

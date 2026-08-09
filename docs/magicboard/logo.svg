@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="OneOpen Magicboard">
+  <defs>
+    <linearGradient id="mb-bg" x1="12%" y1="0%" x2="92%" y2="100%">
+      <stop offset="0%" stop-color="#14b8a6"/>
+      <stop offset="48%" stop-color="#0f766e"/>
+      <stop offset="100%" stop-color="#134e4a"/>
+    </linearGradient>
+    <linearGradient id="mb-shine" x1="20%" y1="0%" x2="55%" y2="60%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="30" fill="url(#mb-bg)"/>
+  <rect width="128" height="128" rx="30" fill="url(#mb-shine)"/>
+  <g fill="none" stroke="#ffffff" stroke-linejoin="round">
+    <rect x="34" y="42" width="52" height="62" rx="6" fill="#ffffff" fill-opacity="0.16" stroke-width="3"/>
+    <rect x="40" y="34" width="52" height="62" rx="6" fill="#ffffff" fill-opacity="0.28" stroke-width="3"/>
+    <path d="M46 28h40a6 6 0 0 1 6 6v54a6 6 0 0 1-6 6H52a6 6 0 0 0-6 6" fill="#ffffff" fill-opacity="0.92" stroke-width="0"/>
+    <path d="M52 40h28M52 52h28M52 64h18" stroke="#0f766e" stroke-width="3.5" stroke-linecap="round" opacity="0.85"/>
+  </g>
+</svg>
